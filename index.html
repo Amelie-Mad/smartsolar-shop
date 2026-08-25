@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="uploads/SmartSolar favicon.png">
+<link rel="apple-touch-icon" href="uploads/SmartSolar Webclip.png">
+<style>
+  *,*::before,*::after{box-sizing:border-box;}
+  body{margin:0;}
+  a{color:#1a6e3c;}
+  a:hover{color:#145c30;}
+  @keyframes logoMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+<script src="./image-slot.js"></script>
+<script type="module" src="https://w.behold.so/widget.js"></script>
+</helmet>
+
+<div style="font-family:'Manrope',sans-serif;color:#111;background:#fff;min-height:100vh;overflow-x:hidden">
+
+  <!-- NAV -->
+  <nav style="position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid #eef0f3">
+    <div style="max-width:1160px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px">
+      <div style="display:flex;align-items:center;gap:8px;cursor:pointer" onClick="{{ scrollTop }}">
+        <img src="uploads/smartsolar-yellow on transparent-logo.svg" alt="SmartSolar" style="height:28px;object-fit:contain" />
+      </div>
+      <div style="display:flex;align-items:center;gap:4px">
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <button style="font-size:14px;font-weight:600;color:#374151;background:none;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;white-space:nowrap" style-hover="background:#f6f7f9;color:#0d1117" onClick="{{ goBenefits }}">{{ c.nav.benefits }}</button>
+          <button style="font-size:14px;font-weight:600;color:#374151;background:none;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;white-space:nowrap" style-hover="background:#f6f7f9;color:#0d1117" onClick="{{ goProduct }}">{{ c.nav.product }}</button>
+          <button style="font-size:14px;font-weight:600;color:#374151;background:none;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;white-space:nowrap" style-hover="background:#f6f7f9;color:#0d1117" onClick="{{ goFaq }}">{{ c.nav.faq }}</button>
+        </sc-if>
+        <div style="display:flex;gap:2px;background:#eef0f3;padding:3px;border-radius:8px">
+          <button style="{{ langViStyle }}" onClick="{{ setLangVi }}">VI</button>
+          <button style="{{ langEnStyle }}" onClick="{{ setLangEn }}">EN</button>
+        </div>
+        <button style="font-size:14px;font-weight:700;background:#f7d65a;color:#0d1117;border:none;cursor:pointer;padding:10px 20px;border-radius:50px;white-space:nowrap" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section style="background:#0d1117;color:#fff;padding:96px 24px 80px;position:relative;overflow:hidden">
+    <video src="uploads/5b4fe9969ff24549877771b6993c6b47.mp4" autoplay="{{ true }}" muted="{{ true }}" loop="{{ true }}" playsInline="{{ true }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"></video>
+    <div style="content:'';position:absolute;inset:0;background:linear-gradient(180deg, rgba(13,17,23,0.75) 0%, rgba(13,17,23,0.55) 45%, rgba(13,17,23,0.85) 100%);pointer-events:none;z-index:0"></div>
+    <div style="max-width:1160px;margin:0 auto;position:relative;z-index:1">
+      <h1 style="font-size:clamp(34px,5.5vw,62px);font-weight:900;line-height:1.08;letter-spacing:-1.5px;max-width:760px;margin-bottom:24px">
+        {{ c.hero.h1a }}<br>
+        <span style="color:#f7d65a">{{ c.hero.h1b }}</span>
+      </h1>
+      <p style="font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.65);max-width:520px;line-height:1.65;margin-bottom:40px;font-weight:500">{{ c.hero.sub }}</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:64px">
+        <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:16px 38px;border:none;border-radius:50px;cursor:pointer;font-family:inherit" style-hover="background:#d4b020;transform:translateY(-2px);box-shadow:0 6px 24px rgba(247,214,90,0.35)" onClick="{{ goOrder }}">{{ c.hero.cta }}</button>
+        <button style="background:transparent;color:rgba(255,255,255,0.8);font-size:16px;font-weight:700;padding:16px 38px;border:2px solid rgba(255,255,255,0.2);border-radius:50px;cursor:pointer;font-family:inherit" style-hover="border-color:rgba(255,255,255,0.5);color:#fff" onClick="{{ goBenefits }}">{{ c.hero.ctaSec }}</button>
+      </div>
+      <div style="display:flex;gap:{{ heroStatsGap }};flex-wrap:wrap;margin-bottom:56px">
+        <sc-for list="{{ c.hero.stats }}" as="s" hint-placeholder-count="4">
+          <div>
+            <div style="font-size:clamp(32px,4vw,44px);font-weight:900;color:#f7d65a;letter-spacing:-1px;line-height:1">{{ s.val }}</div>
+            <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.45);margin-top:4px">{{ s.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEDIA BAR -->
+  <div style="background:#f6f7f9;padding:28px 24px;border-bottom:1px solid #eef0f3">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:11px;font-weight:700;color:#c8cdd6;text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:20px">{{ c.media }}</div>
+      <div style="overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)">
+        <div style="display:flex;align-items:center;gap:20px;width:max-content;animation:logoMarquee 26s linear infinite">
+          <sc-for list="{{ mediaLoop }}" as="m" hint-placeholder-count="16">
+            <a href="{{ m.url }}" target="_blank" rel="noopener noreferrer" title="{{ m.name }}" style="display:flex;align-items:center;justify-content:center;background:#fff;border-radius:12px;border:1px solid #eef0f3;padding:20px 28px;height:96px;width:220px;flex-shrink:0;filter:grayscale(1) opacity(0.55);transition:filter 0.2s, box-shadow 0.2s" style-hover="filter:none;box-shadow:0 2px 16px rgba(0,0,0,0.07)">
+              <img src="{{ m.img }}" alt="{{ m.name }}" loading="lazy" decoding="async" style="max-width:100%;max-height:100%;object-fit:contain" />
+            </a>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BENEFITS -->
+  <section style="padding:88px 24px" id="benefits">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.benefits.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:52px">{{ c.benefits.title }}</h2>
+      <div style="display:grid;grid-template-columns:{{ benefitsGridCols }};gap:20px;align-items:stretch">
+        <div style="background:#0d1117;border-radius:20px;padding:40px 36px;display:flex;flex-direction:column;justify-content:space-between;min-height:280px">
+          <div>
+            <div style="display:inline-block;background:rgba(247,214,90,0.15);color:#f7d65a;font-size:12px;font-weight:800;letter-spacing:1px;padding:5px 12px;border-radius:6px;margin-bottom:24px">01</div>
+            <div style="font-size:clamp(38px,5vw,52px);font-weight:900;color:#f7d65a;letter-spacing:-1.5px;line-height:1;margin-bottom:16px">{{ heroBenefit.stat }}</div>
+            <div style="font-size:19px;font-weight:800;color:#fff;margin-bottom:10px;letter-spacing:-0.3px">{{ heroBenefit.title }}</div>
+          </div>
+          <div style="font-size:15px;color:rgba(255,255,255,0.55);line-height:1.7;font-weight:500">{{ heroBenefit.desc }}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+          <sc-for list="{{ restBenefits }}" as="b" hint-placeholder-count="4">
+            <div style="background:#fff;border:1.5px solid #eef0f3;border-radius:14px;padding:26px 24px;transition:all 0.25s" style-hover="border-color:#f7d65a;box-shadow:0 8px 32px rgba(0,0,0,0.10);transform:translateY(-3px)">
+              <div style="display:inline-block;background:#f6f7f9;color:#6b7280;font-size:11px;font-weight:800;letter-spacing:1px;padding:4px 10px;border-radius:6px;margin-bottom:14px">{{ b.num }}</div>
+              <div style="font-size:16px;font-weight:800;color:#0d1117;margin-bottom:8px;letter-spacing:-0.3px">{{ b.title }}</div>
+              <div style="font-size:14px;color:#6b7280;line-height:1.7;font-weight:500">{{ b.desc }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section style="padding:88px 24px;background:#fff">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.howItWorks.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:56px;max-width:720px">{{ c.howItWorks.title }}</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px 24px">
+        <sc-for list="{{ c.howItWorks.steps }}" as="s" hint-placeholder-count="4">
+          <div>
+            <div style="width:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;background:#f6f7f9;margin-bottom:24px">
+              <image-slot id="{{ s.slotId }}" shape="circle" placeholder="{{ s.placeholder }}"></image-slot>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px">
+              <span style="font-size:13px;font-weight:800;color:#d4b020;text-transform:uppercase;letter-spacing:0.5px">{{ c.howItWorks.stepLabel }}</span>
+              <span style="font-size:22px;font-weight:900;color:#f7d65a;letter-spacing:-0.5px">{{ s.num }}</span>
+            </div>
+            <div style="font-size:17px;font-weight:800;color:#0d1117;margin-bottom:8px;letter-spacing:-0.3px;line-height:1.3">{{ s.title }}</div>
+            <div style="font-size:14px;color:#6b7280;line-height:1.7;font-weight:500">{{ s.desc }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="text-align:center;margin-top:48px">
+        <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:16px 40px;border:none;border-radius:50px;cursor:pointer;font-family:inherit" style-hover="background:#d4b020;transform:translateY(-2px)" onClick="{{ goOrder }}">{{ c.hero.cta }}</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BEFORE / AFTER BILL -->
+  <section style="padding:88px 24px;background:#fdf6e3">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#d4b020;margin-bottom:12px">{{ c.billCompare.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:52px;max-width:640px">{{ c.billCompare.title }}</h2>
+      <div style="display:grid;grid-template-columns:{{ billGridCols }};gap:24px;align-items:center">
+        <div style="background:#fff;border-radius:16px;padding:32px;border:1.5px solid #f0e2b3">
+          <div style="font-size:13px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">{{ c.billCompare.before }}</div>
+          <div style="font-size:36px;font-weight:900;color:#0d1117;letter-spacing:-1px;margin-bottom:16px">{{ c.billCompare.beforeVal }}</div>
+          <div style="height:14px;border-radius:8px;background:#0d1117;width:100%"></div>
+        </div>
+        <div style="text-align:center;font-size:28px;font-weight:900;color:#d4b020">→</div>
+        <div style="background:#fff;border-radius:16px;padding:32px;border:1.5px solid #f0e2b3">
+          <div style="font-size:13px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">{{ c.billCompare.after }}</div>
+          <div style="font-size:36px;font-weight:900;color:#0d1117;letter-spacing:-1px;margin-bottom:16px">{{ c.billCompare.afterVal }}</div>
+          <div style="height:14px;border-radius:8px;background:#f7d65a;width:45%"></div>
+        </div>
+      </div>
+      <div style="margin-top:28px;display:inline-flex;align-items:center;gap:10px;background:#f7d65a;color:#0d1117;padding:14px 24px;border-radius:50px;font-weight:800;font-size:15px">
+        <span>💰</span>{{ c.billCompare.callout }}
+      </div>
+      <div style="margin-top:28px">
+        <button style="background:#0d1117;color:#f7d65a;font-size:16px;font-weight:800;padding:16px 40px;border:none;border-radius:50px;cursor:pointer;font-family:inherit" style-hover="background:#1a2230" onClick="{{ goOrder }}">{{ c.product.cta }}</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT -->
+  <section style="padding:88px 24px;background:#f6f7f9" id="product">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.product.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:8px">{{ c.product.title }}</h2>
+      <p style="font-size:16px;color:#6b7280;margin-bottom:48px;font-weight:600">{{ c.product.subtitle }}</p>
+      <div style="display:grid;grid-template-columns:{{ productCols }};gap:56px;align-items:start">
+        <div style="border-radius:20px;overflow:hidden;aspect-ratio:1/1">
+          <image-slot id="product-photo" shape="rect" fit="contain" placeholder="Drop product bundle photo here"></image-slot>
+        </div>
+        <div>
+          <ul style="list-style:none;padding:0;margin:0 0 28px">
+            <sc-for list="{{ c.product.includes }}" as="item" hint-placeholder-count="5">
+              <li style="font-size:14px;color:#374151;padding:11px 0;border-bottom:1px solid #eef0f3;display:flex;gap:12px;align-items:flex-start;font-weight:600;line-height:1.5"><span style="color:#1a6e3c;font-weight:900;flex-shrink:0;margin-top:1px">✓</span>{{ item }}</li>
+            </sc-for>
+          </ul>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px">
+            <sc-for list="{{ c.product.specs }}" as="s" hint-placeholder-count="6">
+              <div style="background:#f6f7f9;border-radius:9px;padding:14px 16px;border:1px solid #eef0f3">
+                <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.8px">{{ s.label }}</div>
+                <div style="font-size:15px;font-weight:800;color:#0d1117;margin-top:3px">{{ s.val }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background:#0d1117;color:#fff;border-radius:14px;padding:24px 28px">
+            <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">{{ c.priceLabel }}</div>
+            <div style="font-size:24px;font-weight:900;color:#f7d65a;letter-spacing:-0.5px;margin-bottom:4px">{{ c.product.price }}</div>
+            <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;font-weight:500">{{ c.product.priceSub }}</div>
+            <button style="background:#f7d65a;color:#0d1117;font-size:15px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.product.cta }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER -->
+  <section style="padding:88px 24px" id="order">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="display:grid;grid-template-columns:{{ orderCols }};gap:56px;align-items:start">
+        <div style="padding:36px;background:#0d1117;border-radius:20px;color:#fff">
+          <h3 style="font-size:28px;font-weight:900;letter-spacing:-0.6px;margin-bottom:12px;line-height:1.15">{{ c.order.title }}</h3>
+          <p style="font-size:15px;color:rgba(255,255,255,0.55);line-height:1.7;font-weight:500;margin-bottom:32px">{{ c.order.subtitle }}</p>
+          <sc-for list="{{ c.product.includes }}" as="item" hint-placeholder-count="5">
+            <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px">
+              <div style="width:8px;height:8px;background:#f7d65a;border-radius:50%;flex-shrink:0;margin-top:6px"></div>
+              <div style="font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;line-height:1.5">{{ item }}</div>
+            </div>
+          </sc-for>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.order.eyebrow }}</div>
+          <h2 style="font-size:clamp(22px,3vw,32px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:28px">{{ c.order.title }}</h2>
+          <sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#eaf4ee;color:#1a6e3c;border-radius:9px;padding:20px 24px;font-size:16px;font-weight:700;text-align:center">{{ c.order.success }}</div>
+          </sc-if>
+          <sc-if value="{{ isNotSuccess }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#fef2f2;color:#b91c1c;border-radius:9px;padding:12px 16px;font-size:14px;font-weight:600;margin-bottom:14px">{{ c.order.required }}</div>
+              </sc-if>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.name }} *</label>
+                <input style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.name }}" onChange="{{ updName }}">
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.phone }} *</label>
+                <input type="tel" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.phone }}" onChange="{{ updPhone }}">
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.email }}</label>
+                <input type="email" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.email }}" onChange="{{ updEmail }}">
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.address }} *</label>
+                <input style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.address }}" onChange="{{ updAddress }}">
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.locType }}</label>
+                <select style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" value="{{ form.loc }}" onChange="{{ updLoc }}">
+                  <option value="">---</option>
+                  <sc-for list="{{ c.order.locOpts }}" as="o" hint-placeholder-count="4">
+                    <option value="{{ o }}">{{ o }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.note }}</label>
+                <textarea style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117;min-height:80px;resize:vertical" style-focus="border-color:#f7d65a" value="{{ form.note }}" onChange="{{ updNote }}"></textarea>
+              </div>
+              <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%;margin-top:4px" style-hover="background:#d4b020" onClick="{{ handleSubmit }}">{{ c.order.submit }}</button>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section style="padding:88px 24px;background:#f6f7f9" id="faq">
+    <div style="max-width:1160px;margin:0 auto">
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.faq.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:52px">{{ c.faq.title }}</h2>
+      <div style="max-width:760px">
+        <sc-for list="{{ faqItems }}" as="f" hint-placeholder-count="10">
+          <div style="border-bottom:1.5px solid #eef0f3">
+            <button style="width:100%;background:none;border:none;text-align:left;font-family:inherit;font-size:16px;font-weight:700;color:#0d1117;padding:20px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;line-height:1.4" style-hover="color:#1a6e3c" onClick="{{ f.toggle }}">
+              {{ f.q }}
+              <span style="{{ f.iconStyle }}">{{ f.iconChar }}</span>
+            </button>
+            <sc-if value="{{ f.isOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:15px;color:#6b7280;line-height:1.75;padding-bottom:20px;font-weight:500">{{ f.a }}</div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTAGRAM -->
+  <div style="background:#f7d65a;padding:56px 24px;text-align:center">
+    <div style="font-size:clamp(22px,3vw,32px);font-weight:900;color:#0d1117;margin-bottom:6px;letter-spacing:-0.5px">{{ c.ig.title }}</div>
+    <a href="https://instagram.com/smartsolarvn" target="_blank" rel="noopener noreferrer" style="font-size:18px;font-weight:700;color:rgba(13,17,23,0.65);margin-bottom:28px;text-decoration:none;display:inline-block" style-hover="color:#0d1117">{{ c.ig.handle }}</a>
+    <div style="max-width:1100px;margin:0 auto 28px">
+      <behold-widget feed-id="gD6NGFd8RSKTRCzabVYx"></behold-widget>
+    </div>
+    <a href="https://instagram.com/smartsolarvn" target="_blank" rel="noopener noreferrer" style="background:#0d1117;color:#f7d65a;font-size:15px;font-weight:800;padding:14px 36px;border-radius:50px;text-decoration:none;display:inline-block" style-hover="background:#1a2230">{{ c.ig.cta }} →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="background:#161d27;padding:52px 24px 96px">
+    <div style="max-width:1160px;margin:0 auto">
+      <img src="uploads/smartsolar-yellow on transparent-logo.svg" alt="SmartSolar" style="height:28px;object-fit:contain;margin-bottom:10px" />
+      <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);margin-bottom:4px">{{ c.footer.company }}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:3px;font-weight:500">{{ c.footer.reg }}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:3px;font-weight:500">{{ c.footer.address }}</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.3);margin-bottom:3px;font-weight:500">☎ {{ c.footer.phone }}</div>
+      <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap">
+        <a href="https://facebook.com/smartsolarvn" target="_blank" rel="noopener noreferrer" style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;padding:8px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px" style-hover="color:#fff;border-color:rgba(255,255,255,0.3)">Facebook</a>
+        <a href="https://instagram.com/smartsolarvn" target="_blank" rel="noopener noreferrer" style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;padding:8px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px" style-hover="color:#fff;border-color:rgba(255,255,255,0.3)">Instagram</a>
+        <a href="https://linkedin.com/company/smartsolarvn" target="_blank" rel="noopener noreferrer" style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.4);text-decoration:none;padding:8px 14px;border:1px solid rgba(255,255,255,0.1);border-radius:8px" style-hover="color:#fff;border-color:rgba(255,255,255,0.3)">LinkedIn</a>
+      </div>
+      <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:28px 0">
+      <div style="font-size:12px;color:rgba(255,255,255,0.2);font-weight:500">{{ c.footer.rights }}</div>
+    </div>
+  </footer>
+
+  <!-- STICKY MOBILE ORDER BAR -->
+  <sc-if value="{{ showMobileBar }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:0;left:0;right:0;z-index:300;background:#0d1117;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,0.2);font-family:'Manrope',sans-serif">
+      <div style="color:#fff">
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5)">{{ c.mobileBar.label }}</div>
+        <div style="font-size:15px;font-weight:800;color:#f7d65a">{{ c.mobileBar.value }}</div>
+      </div>
+      <button style="background:#f7d65a;color:#0d1117;font-size:14px;font-weight:800;padding:12px 22px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;white-space:nowrap" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+    </div>
+  </sc-if>
+
+  <!-- FLOATING DESKTOP ORDER WIDGET -->
+  <sc-if value="{{ showDesktopFab }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;bottom:28px;right:28px;z-index:300;background:#0d1117;border-radius:16px;padding:18px 22px;box-shadow:0 12px 40px rgba(0,0,0,0.25);display:flex;align-items:center;gap:16px;font-family:'Manrope',sans-serif">
+      <div style="color:#fff">
+        <div style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5)">{{ c.mobileBar.label }}</div>
+        <div style="font-size:16px;font-weight:800;color:#f7d65a">{{ c.mobileBar.value }}</div>
+      </div>
+      <button style="background:#f7d65a;color:#0d1117;font-size:14px;font-weight:800;padding:12px 24px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;white-space:nowrap" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const T = {
+  vi: {
+    nav: { product: "Sản phẩm", benefits: "Lợi ích", howto: "Cách lắp", faq: "FAQ", order: "Đặt hàng ngay" },
+    hero: {
+      badge: "🇻🇳 Đầu tiên tại Việt Nam",
+      h1a: "Tự sản xuất điện mặt trời",
+      h1b: "ngay tại ban công nhà bạn.",
+      sub: "Hệ thống điện mặt trời mini tự lắp đặt trong 30 phút. Tiết kiệm đến 600.000₫/tháng — không cần thợ, không cần giấy phép EVN.",
+      cta: "Đặt hàng ngay", ctaSec: "Tìm hiểu thêm",
+      stats: [
+        { val: "600K₫", label: "tiết kiệm / tháng" },
+        { val: "<2.5", label: "năm hoàn vốn" },
+        { val: "30", label: "phút lắp đặt" },
+        { val: "25+", label: "năm tuổi thọ" },
+      ],
+    },
+    media: "Đã xuất hiện trên",
+    benefits: {
+      eyebrow: "Lợi ích", title: "5 lý do nên sở hữu ngay hôm nay",
+      items: [
+        { icon: "💰", title: "Tiết kiệm tiền điện mỗi ngày", desc: "Giảm đến 600.000₫/tháng trên hóa đơn EVN. Điện mặt trời được ưu tiên sử dụng trước, giảm lượng điện lưới tiêu thụ ngay lập tức." },
+        { icon: "📈", title: "Hoàn vốn chỉ trong chưa đầy 2.5 năm", desc: "Sau thời gian hoàn vốn, bạn được hưởng điện miễn phí suốt hơn 22 năm tuổi thọ còn lại của hệ thống." },
+        { icon: "🏠", title: "Lắp tại ban công hoặc mái nhà", desc: "Phù hợp với nhà phố, chung cư và biệt thự. Khung nhôm gắn lan can, không cần khoan tường." },
+        { icon: "⚡", title: "Lắp đặt trong 30 phút", desc: "Mở hộp, gắn tấm pin lên khung, cắm đầu nối vào inverter, cắm vào ổ điện — xong! Không cần kỹ thuật viên." },
+        { icon: "📋", title: "Không cần thủ tục với EVN", desc: "Hệ thống mini dưới 1kW không yêu cầu đăng ký hay giấy phép. Plug-and-play hoàn toàn." },
+      ],
+    },
+    howItWorks: {
+      eyebrow: "Cách hoạt động", title: "Chỉ cần cắm điện — mọi thứ còn lại tự động", stepLabel: "Bước",
+      steps: [
+        { num: "01", slotId: "step-1", placeholder: "Ảnh cận cảnh tấm pin", title: "Tấm pin hấp thụ từng tia nắng", desc: "Tấm pin JA Solar 460W lắp trên ban công hoặc mái nhà hấp thụ ánh nắng và chuyển hóa thành điện DC." },
+        { num: "02", slotId: "step-2", placeholder: "Ảnh cắm vào ổ điện", title: "Điện mặt trời chảy thẳng vào ổ điện", desc: "Cắm trực tiếp vào ổ điện nhà bạn. Thiết bị trong nhà tự động dùng điện mặt trời trước, phần dư mới hòa vào lưới điện." },
+        { num: "03", slotId: "step-3", placeholder: "Ảnh app S-Miles trên điện thoại", title: "Theo dõi và kiểm soát sản lượng", desc: "Xem sản lượng điện và tiền tiết kiệm theo thời gian thực qua app S-Miles Home." },
+        { num: "04", slotId: "step-4", placeholder: "Ảnh thiết bị gia dụng đang dùng điện", title: "Dùng điện mặt trời, giảm hóa đơn", desc: "Tiết kiệm hàng trăm nghìn đồng mỗi tháng và chủ động hơn với nguồn điện của chính mình." },
+      ],
+    },
+    billCompare: {
+      eyebrow: "So sánh hóa đơn", title: "Hóa đơn tiền điện giảm rõ rệt ngay tháng đầu",
+      before: "Trước khi lắp SmartSolar", beforeVal: "1.100.000₫",
+      after: "Sau khi lắp SmartSolar", afterVal: "500.000₫",
+      callout: "Tiết kiệm khoảng 600.000₫ mỗi tháng",
+      chartTitle: "Dòng tiền tích lũy sau khi đầu tư",
+      chartInvest: "Đầu tư ban đầu: 11.000.000₫",
+      chartBreak: "Hoàn vốn ở tháng 18",
+      chartEnd: "Lãi tích lũy sau 30 tháng: +7.000.000₫",
+      chartM0: "Tháng 0", chartM18: "Tháng 18", chartM30: "Tháng 30",
+    },
+    gallery: { eyebrow: "Thực tế lắp đặt", title: "Được lắp trên ban công và mái nhà khắp Việt Nam" },
+    product: {
+      eyebrow: "Bộ sản phẩm", title: "SmartSolar Mini", subtitle: "Bộ hoàn chỉnh — mọi thứ bạn cần trong một hộp",
+      includes: [
+        "2× Tấm pin JA Solar 460W Mono Bifacial (BH 12 năm sản phẩm, 30 năm hiệu suất)",
+        "1× Hoymiles HF-800-WB Micro Inverter — WiFi & Bluetooth tích hợp (BH 12 năm)",
+        "1× Khung lắp đặt nhôm cho ban công / mái nhà",
+        "Cáp DC, đầu nối MC4, cáp AC Schuko 5m — toàn bộ phụ kiện",
+        "Hướng dẫn lắp đặt video từng bước bằng tiếng Việt",
+      ],
+      specs: [
+        { label: "Công suất DC", val: "920W (2×460W)" },
+        { label: "Công suất AC", val: "800W" },
+        { label: "Giám sát", val: "App S-Miles (WiFi/BT)" },
+        { label: "Bảo hành inverter", val: "12 năm" },
+        { label: "Bảo hành tấm pin", val: "12 / 30 năm" },
+        { label: "Sản lượng ước tính", val: "~100 kWh / tháng" },
+      ],
+      price: "11.000.000₫", priceSub: "Đã bao gồm VAT — ưu đãi đặc biệt cho 50 khách hàng đầu tiên", cta: "Đặt hàng ngay",
+    },
+    priceLabel: "Giá",
+    order: {
+      eyebrow: "Đặt hàng", title: "Bắt đầu tiết kiệm tiền điện ngay hôm nay",
+      subtitle: "Điền thông tin và đội ngũ SmartSolar sẽ liên hệ trong vòng 24h.",
+      name: "Họ và tên", phone: "Số điện thoại", email: "Email",
+      address: "Địa chỉ lắp đặt", locType: "Vị trí lắp đặt",
+      locOpts: ["Ban công chung cư", "Mái nhà (nhà phố)", "Sân thượng", "Khác"],
+      note: "Ghi chú thêm", submit: "Gửi đơn đặt hàng",
+      success: "✅ Cảm ơn bạn! Chúng tôi sẽ liên hệ trong 24h.",
+      required: "Vui lòng điền đầy đủ họ tên, số điện thoại và địa chỉ.",
+    },
+    faq: {
+      eyebrow: "FAQ", title: "Câu hỏi thường gặp",
+      items: [
+        { q: "Hệ thống điện mặt trời mini là gì?", a: "Đây là hệ thống pin năng lượng mặt trời nhỏ gọn dành cho ban công hoặc mái nhà. Tấm pin sản xuất điện, micro inverter chuyển đổi sang AC 220V và đưa trực tiếp vào mạng điện trong nhà qua ổ cắm thông thường." },
+        { q: "Tôi có thể tự lắp không? Có cần thợ điện không?", a: "Hoàn toàn tự lắp được! Hệ thống được thiết kế plug-and-play. Bạn chỉ cần gắn tấm pin lên khung, kết nối cáp DC với inverter, rồi cắm vào ổ điện. Toàn bộ khoảng 30 phút và không cần bằng cấp điện." },
+        { q: "Có cần đăng ký với EVN không?", a: "Không. Hệ thống dưới 1kW không yêu cầu đăng ký hay thủ tục với EVN. Bạn cắm và dùng ngay." },
+        { q: "Tôi tiết kiệm được bao nhiêu tiền điện?", a: "Tại Việt Nam, hệ thống 920W DC có thể sản xuất khoảng 100 kWh/tháng. Với giá điện EVN bậc cao (~3.000-4.000₫/kWh), bạn tiết kiệm khoảng 300.000-600.000₫/tháng." },
+        { q: "Thời gian hoàn vốn là bao lâu?", a: "Chưa đầy 2.5 năm tính từ ngày lắp đặt, sau đó bạn được hưởng điện miễn phí trong hơn 22 năm còn lại." },
+        { q: "Hệ thống có hoạt động khi mất điện không?", a: "Không. Micro inverter là thiết bị nối lưới, cần tín hiệu từ lưới điện để hoạt động. Khi mất điện, hệ thống tự ngắt vì lý do an toàn. Liên hệ chúng tôi để tìm hiểu gói có pin lưu trữ dự phòng." },
+        { q: "Hệ thống có bền với thời tiết Việt Nam không?", a: "Có. Tấm pin JA Solar có chỉ số IP68, chịu được mưa lớn, nhiệt độ cao và bão. Micro inverter Hoymiles đạt IP67. Cả hai đều được thiết kế cho khí hậu nhiệt đới." },
+        { q: "Tôi ở chung cư có dùng được không?", a: "Được! Hệ thống được thiết kế đặc biệt cho ban công chung cư. Khung nhôm gắn vào lan can mà không cần khoan tường hay xin phép ban quản lý." },
+        { q: "Tôi có thể theo dõi sản lượng điện không?", a: "Có. Micro inverter tích hợp WiFi và Bluetooth. Bạn theo dõi sản lượng theo thời gian thực qua app S-Miles Home — xem kWh tạo ra, tiền tiết kiệm, CO₂ giảm thải." },
+        { q: "Bảo hành như thế nào?", a: "Tấm pin JA Solar: 12 năm bảo hành sản phẩm và 30 năm bảo hành hiệu suất (≥84.95%). Micro inverter Hoymiles: 12 năm bảo hành chính hãng. SmartSolar hỗ trợ kỹ thuật trong suốt thời gian sử dụng." },
+      ],
+    },
+    ig: { title: "Theo dõi hành trình của chúng tôi", handle: "@smartsolarvn", cta: "Xem trên Instagram" },
+    mobileBar: { label: "Tiết kiệm ước tính", value: "~600K₫/tháng" },
+    footer: {
+      company: "CÔNG TY TNHH NĂNG LƯỢNG MẶT TRỜI SMARTSOLAR",
+      reg: "Giấy chứng nhận ĐKDN số 0318442962 do Sở KH&ĐT TP.HCM cấp ngày 07/05/2024",
+      address: "30/11C Mạc Đĩnh Chi, Phường Sài Gòn, TP. Hồ Chí Minh",
+      phone: "076 560 12 50", rights: "© 2026 SmartSolar. All rights reserved.",
+    },
+  },
+  en: {
+    nav: { product: "Product", benefits: "Benefits", howto: "How it works", faq: "FAQ", order: "Order now" },
+    hero: {
+      badge: "🇻🇳 First in Vietnam",
+      h1a: "Generate your own solar power",
+      h1b: "right from your balcony.",
+      sub: "Self-install mini solar system in 30 minutes. Save up to 600,000₫/month on electricity — no electrician, no EVN paperwork.",
+      cta: "Order now", ctaSec: "Learn more",
+      stats: [
+        { val: "600K₫", label: "saved / month" },
+        { val: "<2.5", label: "yr payback" },
+        { val: "30", label: "min install" },
+        { val: "25+", label: "year lifespan" },
+      ],
+    },
+    media: "As seen on",
+    benefits: {
+      eyebrow: "Benefits", title: "5 reasons to go solar today",
+      items: [
+        { icon: "💰", title: "Save on electricity every day", desc: "Cut your EVN bill by up to 600,000₫/month. Solar power is used first, automatically reducing grid consumption." },
+        { icon: "📈", title: "Payback in under 2.5 years", desc: "After payback, enjoy free electricity for the remaining 22+ year lifespan of the system." },
+        { icon: "🏠", title: "Install on balcony or rooftop", desc: "Works for apartments, townhouses and villas. Aluminium frame attaches to railings — no wall drilling needed." },
+        { icon: "⚡", title: "Install in 30 minutes", desc: "Unbox, mount panels, connect to inverter, plug into your outlet — done. No electrician required." },
+        { icon: "📋", title: "No EVN paperwork required", desc: "Mini systems under 1kW need no registration or permits. Truly plug-and-play." },
+      ],
+    },
+    howItWorks: {
+      eyebrow: "How it works", title: "Just plug it in — everything else runs on its own", stepLabel: "Step",
+      steps: [
+        { num: "01", slotId: "step-1", placeholder: "Close-up panel photo", title: "Panels catch every ray of sunlight", desc: "JA Solar 460W panels mounted on your balcony or roof absorb sunlight and convert it into DC electricity." },
+        { num: "02", slotId: "step-2", placeholder: "Photo of plugging into outlet", title: "Solar power flows straight into your outlet", desc: "Plug directly into your home outlet. Appliances automatically draw on solar power first, any surplus flows to the grid." },
+        { num: "03", slotId: "step-3", placeholder: "S-Miles app on phone photo", title: "Monitor and control your output", desc: "Track production and savings in real time through the S-Miles Home app." },
+        { num: "04", slotId: "step-4", placeholder: "Household appliances photo", title: "Use solar power, cut your bill", desc: "Save hundreds of thousands of đồng each month and gain more independence over your own electricity." },
+      ],
+    },
+    billCompare: {
+      eyebrow: "Bill comparison", title: "Your electricity bill drops noticeably from month one",
+      before: "Before SmartSolar", beforeVal: "1,100,000₫",
+      after: "After SmartSolar", afterVal: "500,000₫",
+      callout: "Save about 600,000₫ every month",
+      chartTitle: "Cumulative cash flow after investing",
+      chartInvest: "Initial investment: 11,000,000₫",
+      chartBreak: "Payback at month 18",
+      chartEnd: "Cumulative gain after 30 months: +7,000,000₫",
+      chartM0: "Month 0", chartM18: "Month 18", chartM30: "Month 30",
+    },
+    gallery: { eyebrow: "Real installs", title: "Installed on balconies and rooftops across Vietnam" },
+    product: {
+      eyebrow: "Product bundle", title: "SmartSolar Mini", subtitle: "Complete kit — everything you need in one box",
+      includes: [
+        "2× JA Solar 460W Mono Bifacial panels (12-yr product, 30-yr performance warranty)",
+        "1× Hoymiles HF-800-WB Micro Inverter — built-in WiFi & Bluetooth (12-yr warranty)",
+        "1× Aluminium mounting structure for balcony or rooftop",
+        "DC cables, MC4 connectors, 5m AC Schuko cable — all accessories included",
+        "Step-by-step Vietnamese video installation guide",
+      ],
+      specs: [
+        { label: "DC capacity", val: "920W (2×460W)" },
+        { label: "AC output", val: "800W" },
+        { label: "Monitoring", val: "S-Miles App (WiFi/BT)" },
+        { label: "Inverter warranty", val: "12 years" },
+        { label: "Panel warranty", val: "12 / 30 years" },
+        { label: "Est. monthly output", val: "~100 kWh / month" },
+      ],
+      price: "11,000,000₫", priceSub: "VAT included — special offer for the first 50 customers", cta: "Order now",
+    },
+    priceLabel: "Price",
+    order: {
+      eyebrow: "Order", title: "Start saving on electricity today",
+      subtitle: "Fill in your details and the SmartSolar team will contact you within 24h.",
+      name: "Full name", phone: "Phone number", email: "Email",
+      address: "Installation address", locType: "Installation location",
+      locOpts: ["Apartment balcony", "Townhouse rooftop", "Terrace / rooftop garden", "Other"],
+      note: "Additional notes", submit: "Submit order",
+      success: "✅ Thank you! We'll be in touch within 24h.",
+      required: "Please fill in your name, phone number and address.",
+    },
+    faq: {
+      eyebrow: "FAQ", title: "Frequently asked questions",
+      items: [
+        { q: "What is a mini solar system?", a: "A compact solar system for balconies or rooftops. Panels generate DC power, the micro inverter converts it to 220V AC, and it feeds directly into your home circuit through a standard outlet." },
+        { q: "Can I install it myself? Do I need an electrician?", a: "Yes, fully self-install! The system is plug-and-play. Mount the panels, connect the DC cables to the inverter, then plug into your outlet. Around 30 minutes, no electrical licence needed." },
+        { q: "Do I need to register with EVN?", a: "No. Systems under 1kW don't require any registration or permits with EVN. Just plug in and use." },
+        { q: "How much will I save?", a: "In Vietnam's sunny climate, the 920W DC system can produce ~100 kWh/month. At upper-tier EVN rates (~3,000-4,000₫/kWh), that's 300,000-600,000₫/month in savings." },
+        { q: "How long is the payback period?", a: "Under 2.5 years from installation, after which you receive effectively free electricity for the remaining 22+ year system lifetime." },
+        { q: "Does it work during a power outage?", a: "No. The micro inverter is grid-tied and needs the grid signal to operate. During outages it shuts off for safety. Contact us about battery storage add-ons." },
+        { q: "Is it weatherproof for Vietnam's climate?", a: "Yes. JA Solar panels are IP68 rated, the Hoymiles inverter is IP67 — both designed for tropical heat, heavy rain, and storms." },
+        { q: "I live in an apartment. Can I use it?", a: "Absolutely. The mounting frame attaches to your balcony railing without drilling walls or requiring building management approval." },
+        { q: "Can I monitor my electricity production?", a: "Yes. The micro inverter has built-in WiFi and Bluetooth. Monitor real-time output, savings, and CO₂ reduction via the S-Miles Home app." },
+        { q: "What is the warranty?", a: "JA Solar panels: 12-year product + 30-year performance (≥84.95%) warranty. Hoymiles inverter: 12-year manufacturer warranty. SmartSolar provides technical support throughout." },
+      ],
+    },
+    ig: { title: "Follow our journey", handle: "@smartsolarvn", cta: "View on Instagram" },
+    mobileBar: { label: "Estimated savings", value: "~600K₫/month" },
+    footer: {
+      company: "SMARTSOLAR ENERGY COMPANY LIMITED",
+      reg: "Business registration no. 0318442962, issued by HCMC Department of Planning and Investment, 07/05/2024",
+      address: "30/11C Mac Dinh Chi, Sai Gon Ward, Ho Chi Minh City, Vietnam",
+      phone: "076 560 12 50", rights: "© 2026 SmartSolar. All rights reserved.",
+    },
+  },
+};
+
+const MEDIA_LOGOS = [
+  { name: "VTV", url: "https://www.facebook.com/reel/1466808908536880", img: "uploads/VTV.png" },
+  { name: "VnEconomy", url: "https://en.vneconomy.vn/vietnam-energy-startup-secures-nearly-2-mln-in-seed-funding.htm", img: "uploads/VnEconomy.webp" },
+  { name: "Đầu Tư Online", url: "https://baodautu.vn/doanh-nhan-kevin-junker-ceo-smartsolar-su-menh-giup-nguoi-viet-tiep-can-nang-luong-sach-d256791.html", img: "uploads/DauTuOnline.svg" },
+  { name: "DealStreetAsia", url: "https://www.dealstreetasia.com/stories/smartsolar-seed-funding-hsbc-loan-315-medical-432884", img: "uploads/DealStreet Asia.webp" },
+  { name: "Vietcetera", url: "https://vietcetera.com/vn/viet-nam-va-giac-mo-nang-luong-mat-troi-tu-mai-nha-nho-den-vi-the-khu-vuc-dong-nam-a", img: "uploads/Vietcetera.webp" },
+  { name: "AsiaBizToday", url: "https://www.asiabiztoday.com/2025/03/03/smartsolar-secures-1-85m-in-seed-funding-to-drive-rooftop-solar-adoption-in-southeast-asia/", img: "uploads/AsiaBizToday.webp" },
+  { name: "Vietnam Innovators", url: "https://vietcetera.com/vn/podcast/vietnam-innovators/is-vietnam-emerging-as-southeast-asias-leader-in-green-energy-kevin-junker-founder-smartsolar-s640", img: "uploads/VietnamInnovators.webp" },
+  { name: "Vietnam Investment Review", url: "https://vir.com.vn/smartsolar-bags-185-million-in-seed-funding-123943.html", img: "uploads/Vietnam investment Review.svg" },
+];
+
+class Component extends DCLogic {
+  state = {
+    lang: "vi", openFaq: null, scrolled: false,
+    form: { name: "", phone: "", email: "", address: "", loc: "", note: "" },
+    formState: "idle",
+    windowWidth: typeof window !== "undefined" ? window.innerWidth : 1200,
+  };
+
+  componentDidMount() {
+    this._onResize = () => this.setState({ windowWidth: window.innerWidth });
+    window.addEventListener("resize", this._onResize);
+    this._onScroll = () => this.setState({ scrolled: window.scrollY > 480 });
+    window.addEventListener("scroll", this._onScroll);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("resize", this._onResize);
+    window.removeEventListener("scroll", this._onScroll);
+  }
+
+  scrollTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
+
+  renderVals() {
+    const { lang, openFaq, form, formState, windowWidth, scrolled } = this.state;
+    const c = T[lang];
+    const isMobile = windowWidth < 768;
+
+    const activeLang = { fontSize: 12, fontWeight: 700, padding: "4px 10px", border: "none", borderRadius: 5, cursor: "pointer", background: "#fff", color: "#0d1117", boxShadow: "0 1px 4px rgba(0,0,0,0.12)" };
+    const inactiveLang = { fontSize: 12, fontWeight: 700, padding: "4px 10px", border: "none", borderRadius: 5, cursor: "pointer", background: "transparent", color: "#6b7280" };
+
+    const faqItems = c.faq.items.map((f, i) => ({
+      q: f.q, a: f.a,
+      isOpen: openFaq === i,
+      iconChar: openFaq === i ? "−" : "+",
+      iconStyle: openFaq === i
+        ? { width: 28, height: 28, borderRadius: "50%", background: "#f7d65a", color: "#0d1117", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 16, fontWeight: 700 }
+        : { width: 28, height: 28, borderRadius: "50%", background: "#eef0f3", color: "#6b7280", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, fontSize: 16, fontWeight: 700 },
+      toggle: () => this.setState({ openFaq: openFaq === i ? null : i }),
+    }));
+
+    const [firstBenefit, ...rest] = c.benefits.items;
+    const heroBenefit = { ...firstBenefit, stat: c.hero.stats[0].val };
+    const restBenefits = rest.map((b, i) => ({ ...b, num: String(i + 2).padStart(2, "0") }));
+
+    return {
+      c, mediaLogos: MEDIA_LOGOS, mediaLoop: MEDIA_LOGOS.concat(MEDIA_LOGOS), faqItems,
+      heroBenefit, restBenefits,
+      benefitsGridCols: isMobile ? "1fr" : "0.9fr 1.6fr",
+      isDesktop: !isMobile,
+      showMobileBar: isMobile && scrolled,
+      showDesktopFab: !isMobile && scrolled,
+      billGridCols: isMobile ? "1fr" : "1fr auto 1fr",
+      productCols: isMobile ? "1fr" : "1fr 1fr",
+      orderCols: isMobile ? "1fr" : "1fr 1.1fr",
+      heroStatsGap: isMobile ? "24px" : "40px",
+      langViStyle: lang === "vi" ? activeLang : inactiveLang,
+      langEnStyle: lang === "en" ? activeLang : inactiveLang,
+      setLangVi: () => this.setState({ lang: "vi" }),
+      setLangEn: () => this.setState({ lang: "en" }),
+      scrollTop: () => window.scrollTo({ top: 0, behavior: "smooth" }),
+      goBenefits: () => this.scrollTo("benefits"),
+      goProduct: () => this.scrollTo("product"),
+      goFaq: () => this.scrollTo("faq"),
+      goOrder: () => this.scrollTo("order"),
+      form,
+      updName: (e) => this.setState({ form: { ...form, name: e.target.value } }),
+      updPhone: (e) => this.setState({ form: { ...form, phone: e.target.value } }),
+      updEmail: (e) => this.setState({ form: { ...form, email: e.target.value } }),
+      updAddress: (e) => this.setState({ form: { ...form, address: e.target.value } }),
+      updLoc: (e) => this.setState({ form: { ...form, loc: e.target.value } }),
+      updNote: (e) => this.setState({ form: { ...form, note: e.target.value } }),
+      isSuccess: formState === "success",
+      isNotSuccess: formState !== "success",
+      isError: formState === "error",
+      handleSubmit: () => {
+        if (!form.name || !form.phone || !form.address) { this.setState({ formState: "error" }); return; }
+        this.setState({ formState: "success" });
+      },
+    };
+  }
+}
+
+</script>
+</body>
+</html>
