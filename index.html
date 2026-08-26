@@ -211,6 +211,9 @@
     </div>
   </section>
 
+  <!-- Hidden target so the Google Form POST below doesn't navigate the page away -->
+  <iframe name="gform-target" style="display:none" title="form submit target"></iframe>
+
   <!-- ORDER -->
   <section style="padding:88px 24px" id="order">
     <div style="max-width:1160px;margin:0 auto">
@@ -564,6 +567,22 @@ const MEDIA_LOGOS = [
   { name: "Vietnam Investment Review", url: "https://vir.com.vn/smartsolar-bags-185-million-in-seed-funding-123943.html", img: "uploads/Vietnam investment Review.svg" },
 ];
 
+// --- Google Form wiring ---------------------------------------------------
+// Order form submissions POST into this Google Form (see submitToGoogleForm
+// below); responses land in its linked Sheet. To point this at a different
+// form: open it, ⋮ menu → "Get pre-filled link", fill every question with a
+// dummy answer, copy the link, and pull the form ID + each entry.NNNNNNN
+// param out of it into the two constants below.
+const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSd9yOboYVjbew1HbRIotDirob8ucOTxwtrK04s0x-ENAJgapw/formResponse";
+const GOOGLE_FORM_ENTRIES = {
+  name: "entry.612048439",
+  phone: "entry.1432560437",
+  email: "entry.1636672259",
+  address: "entry.816917275",
+  loc: "entry.739422238",
+  note: "entry.1373791809",
+};
+
 class Component extends DCLogic {
   state = {
     lang: "vi", openFaq: null, scrolled: false,
@@ -584,6 +603,39 @@ class Component extends DCLogic {
   }
 
   scrollTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
+
+  // Submits `form` to the Google Form's response endpoint via a hidden
+  // <form>/<iframe> POST. This is fire-and-forget: Google Forms doesn't
+  // send CORS headers, so we can't read a response back, but the browser
+  // POST itself isn't blocked by CORS the way a fetch() read would be.
+  submitToGoogleForm(form) {
+    if (GOOGLE_FORM_ACTION.includes("REPLACE_WITH_YOUR_FORM_ID")) {
+      console.warn("Google Form not configured yet — set GOOGLE_FORM_ACTION and GOOGLE_FORM_ENTRIES.");
+      return;
+    }
+    const values = {
+      [GOOGLE_FORM_ENTRIES.name]: form.name,
+      [GOOGLE_FORM_ENTRIES.phone]: form.phone,
+      [GOOGLE_FORM_ENTRIES.email]: form.email,
+      [GOOGLE_FORM_ENTRIES.address]: form.address,
+      [GOOGLE_FORM_ENTRIES.loc]: form.loc,
+      [GOOGLE_FORM_ENTRIES.note]: form.note,
+    };
+    const el = document.createElement("form");
+    el.action = GOOGLE_FORM_ACTION;
+    el.method = "POST";
+    el.target = "gform-target";
+    el.style.display = "none";
+    for (const [entry, value] of Object.entries(values)) {
+      const input = document.createElement("input");
+      input.name = entry;
+      input.value = value ?? "";
+      el.appendChild(input);
+    }
+    document.body.appendChild(el);
+    el.submit();
+    el.remove();
+  }
 
   renderVals() {
     const { lang, openFaq, form, formState, windowWidth, scrolled } = this.state;
@@ -639,6 +691,11 @@ class Component extends DCLogic {
       isError: formState === "error",
       handleSubmit: () => {
         if (!form.name || !form.phone || !form.address) { this.setState({ formState: "error" }); return; }
+        // The Google Form's dropdown options are Vietnamese; normalize so an
+        // EN-language submission still records a value that matches it.
+        const locIndex = c.order.locOpts.indexOf(form.loc);
+        const locVi = locIndex >= 0 ? T.vi.order.locOpts[locIndex] : form.loc;
+        this.submitToGoogleForm({ ...form, loc: locVi });
         this.setState({ formState: "success" });
       },
     };
