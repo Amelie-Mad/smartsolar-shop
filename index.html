@@ -14,9 +14,27 @@
 <meta property="og:description" content="Tự sản xuất điện mặt trời ngay tại ban công nhà bạn. Tiết kiệm đến 600.000₫/tháng, lắp đặt trong 30 phút.">
 <meta property="og:image" content="https://shop.smartsolar.com.vn/uploads/SmartSolar%20Webclip.png">
 <meta name="twitter:card" content="summary">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1753517255725608');
+fbq('track', 'PageView');
+</script>
+<!-- End Meta Pixel Code -->
 <script src="./support.js"></script>
 </head>
 <body>
+<!-- Meta Pixel fallback for visitors with JavaScript turned off -->
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
+/></noscript>
 <x-dc>
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -52,10 +70,143 @@
           <button style="{{ langViStyle }}" onClick="{{ setLangVi }}">VI</button>
           <button style="{{ langEnStyle }}" onClick="{{ setLangEn }}">EN</button>
         </div>
-        <button style="font-size:14px;font-weight:700;background:#f7d65a;color:#0d1117;border:none;cursor:pointer;padding:10px 20px;border-radius:50px;white-space:nowrap" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+        <button aria-label="{{ c.cart.title }}" style="position:relative;width:42px;height:42px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#0d1117;flex-shrink:0" style-hover="background:#f6f7f9" onClick="{{ openCart }}">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{ false }}">
+            <span style="position:absolute;top:2px;right:0;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#1a6e3c;color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center">{{ cartCount }}</span>
+          </sc-if>
+        </button>
+        <sc-if value="{{ isDesktop }}" hint-placeholder-val="{{ true }}">
+          <button style="font-size:14px;font-weight:700;background:#f7d65a;color:#0d1117;border:none;cursor:pointer;padding:10px 20px;border-radius:50px;white-space:nowrap" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+        </sc-if>
       </div>
     </div>
   </nav>
+
+  <!-- CHECKOUT -->
+  <sc-if value="{{ isCheckoutView }}" hint-placeholder-val="{{ false }}">
+    <section style="padding:40px 24px 96px;background:#f6f7f9;min-height:calc(100vh - 64px)">
+      <div style="max-width:1160px;margin:0 auto">
+        <button style="background:none;border:none;padding:6px 0;font-family:inherit;font-size:14px;font-weight:700;color:#1a6e3c;cursor:pointer;margin-bottom:16px" style-hover="color:#145c30" onClick="{{ backToShop }}">← {{ c.checkout.back }}</button>
+        <h1 style="font-size:clamp(28px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin:0 0 32px">{{ c.checkout.title }}</h1>
+        <div style="display:grid;grid-template-columns:{{ checkoutCols }};gap:24px;align-items:start">
+          <div style="display:grid;gap:20px">
+            <div style="background:#fff;border:1.5px solid #eef0f3;border-radius:16px;padding:28px">
+              <h2 style="font-size:18px;font-weight:800;color:#0d1117;margin:0 0 20px">1. {{ c.checkout.contact }}</h2>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.name }} *</label>
+                <input autocomplete="name" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ checkout.name }}" onChange="{{ upd.name }}">
+              </div>
+              <div style="display:grid;grid-template-columns:{{ twoCols }};gap:14px">
+                <div>
+                  <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.phone }} *</label>
+                  <input type="tel" inputmode="tel" autocomplete="tel" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ checkout.phone }}" onChange="{{ upd.phone }}">
+                </div>
+                <div>
+                  <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.email }}</label>
+                  <input type="email" autocomplete="email" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ checkout.email }}" onChange="{{ upd.email }}">
+                </div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #eef0f3;border-radius:16px;padding:28px">
+              <h2 style="font-size:18px;font-weight:800;color:#0d1117;margin:0 0 20px">2. {{ c.checkout.delivery }}</h2>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.address }} *</label>
+                <input autocomplete="street-address" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ checkout.address }}" onChange="{{ upd.address }}">
+              </div>
+              <div style="margin-bottom:14px">
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.locType }}</label>
+                <select style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" value="{{ checkout.loc }}" onChange="{{ upd.loc }}">
+                  <option value="">---</option>
+                  <sc-for list="{{ c.checkout.locOpts }}" as="o" hint-placeholder-count="4">
+                    <option value="{{ o }}">{{ o }}</option>
+                  </sc-for>
+                </select>
+              </div>
+              <div>
+                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.checkout.note }}</label>
+                <textarea style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117;min-height:80px;resize:vertical" style-focus="border-color:#f7d65a" value="{{ checkout.note }}" onChange="{{ upd.note }}"></textarea>
+              </div>
+            </div>
+            <div style="background:#fff;border:1.5px solid #eef0f3;border-radius:16px;padding:28px">
+              <h2 style="font-size:18px;font-weight:800;color:#0d1117;margin:0 0 20px">3. {{ c.checkout.payment }}</h2>
+              <button role="radio" aria-checked="{{ isBankTransfer }}" style="{{ payOptionStyle }}" onClick="{{ chooseBankTransfer }}">
+                <span style="{{ payRadioStyle }}"></span>
+                <span style="text-align:left">
+                  <span style="display:block;font-size:15px;font-weight:800;color:#0d1117">{{ c.checkout.bankTransfer }}</span>
+                  <span style="display:block;font-size:13px;font-weight:600;color:#6b7280;margin-top:2px">{{ c.checkout.bankTransferSub }}</span>
+                </span>
+              </button>
+              <sc-if value="{{ isBankTransfer }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:16px;display:grid;grid-template-columns:{{ qrCols }};gap:20px;align-items:center;background:#f6f7f9;border-radius:12px;padding:20px">
+                  <img src="{{ qrMockSrc }}" alt="{{ c.checkout.qrAlt }}" loading="lazy" width="180" height="180" style="width:180px;height:180px;border-radius:8px;justify-self:center;display:block" />
+                  <div>
+                    <div style="display:inline-block;background:#fef2f2;color:#b91c1c;font-size:12px;font-weight:800;padding:6px 10px;border-radius:6px;margin-bottom:12px;line-height:1.4">{{ c.checkout.mockup }}</div>
+                    <sc-for list="{{ paymentRows }}" as="row" hint-placeholder-count="5">
+                      <div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #eef0f3;font-size:14px">
+                        <span style="color:#6b7280;font-weight:600">{{ row.label }}</span>
+                        <span style="color:#0d1117;font-weight:800;text-align:right">{{ row.val }}</span>
+                      </div>
+                    </sc-for>
+                    <div style="font-size:13px;color:#6b7280;font-weight:600;line-height:1.6;margin-top:12px">{{ c.checkout.qrHint }}</div>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+            <sc-if value="{{ hasCheckoutError }}" hint-placeholder-val="{{ false }}">
+              <div role="alert" style="background:#fef2f2;color:#b91c1c;border-radius:9px;padding:12px 16px;font-size:14px;font-weight:600">{{ checkoutError }}</div>
+            </sc-if>
+            <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:18px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%" style-hover="background:#d4b020" disabled="{{ placing }}" onClick="{{ placeOrder }}">{{ placeLabel }}</button>
+            <div style="font-size:13px;color:#6b7280;font-weight:600;text-align:center;line-height:1.6">🔒 {{ c.checkout.secureNote }}</div>
+          </div>
+          <div style="{{ summaryStyle }}">
+            <h2 style="font-size:18px;font-weight:800;color:#0d1117;margin:0 0 16px">{{ c.checkout.summary }}</h2>
+            <sc-for list="{{ cartLines }}" as="line" hint-placeholder-count="2">
+              <div style="display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid #eef0f3;font-size:14px">
+                <span style="color:#374151;font-weight:600">{{ line.name }} × {{ line.qty }}</span>
+                <span style="color:#0d1117;font-weight:800;white-space:nowrap">{{ line.total }}</span>
+              </div>
+            </sc-for>
+            <div style="display:flex;justify-content:space-between;gap:12px;padding-top:16px;font-size:17px;font-weight:900;color:#0d1117">
+              <span>{{ c.checkout.total }}</span><span>{{ cartTotalFmt }}</span>
+            </div>
+            <div style="font-size:13px;color:#6b7280;font-weight:600;margin-top:4px">{{ c.cart.vatNote }}</div>
+            <div style="font-size:13px;color:#6b7280;font-weight:600;margin-top:16px">{{ c.checkout.orderRef }}: <span style="color:#0d1117;font-weight:800">{{ orderRef }}</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- ORDER CONFIRMATION -->
+  <sc-if value="{{ isConfirmView }}" hint-placeholder-val="{{ false }}">
+    <section style="padding:56px 24px 96px;background:#f6f7f9;min-height:calc(100vh - 64px)">
+      <div style="max-width:720px;margin:0 auto;background:#fff;border:1.5px solid #eef0f3;border-radius:20px;padding:{{ confirmPad }}">
+        <div style="width:56px;height:56px;border-radius:50%;background:#eaf4ee;color:#1a6e3c;font-size:28px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-bottom:20px">✓</div>
+        <h1 style="font-size:clamp(24px,3.5vw,32px);font-weight:900;letter-spacing:-0.6px;color:#0d1117;line-height:1.2;margin:0 0 12px">{{ c.confirm.title }}</h1>
+        <p style="font-size:15px;color:#6b7280;line-height:1.7;font-weight:500;margin:0 0 8px">{{ c.confirm.body }}</p>
+        <p style="font-size:15px;color:#374151;font-weight:600;margin:0 0 28px">{{ c.checkout.orderRef }}: <span style="color:#0d1117;font-weight:900">{{ placedRef }}</span></p>
+        <h2 style="font-size:18px;font-weight:800;color:#0d1117;margin:0 0 16px">{{ c.confirm.payNow }}</h2>
+        <div style="display:grid;grid-template-columns:{{ qrCols }};gap:20px;align-items:center;background:#f6f7f9;border-radius:12px;padding:20px;margin-bottom:28px">
+          <img src="{{ qrMockSrc }}" alt="{{ c.checkout.qrAlt }}" loading="lazy" width="180" height="180" style="width:180px;height:180px;border-radius:8px;justify-self:center;display:block" />
+          <div>
+            <div style="display:inline-block;background:#fef2f2;color:#b91c1c;font-size:12px;font-weight:800;padding:6px 10px;border-radius:6px;margin-bottom:12px;line-height:1.4">{{ c.checkout.mockup }}</div>
+            <sc-for list="{{ paymentRows }}" as="row" hint-placeholder-count="5">
+              <div style="display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid #eef0f3;font-size:14px">
+                <span style="color:#6b7280;font-weight:600">{{ row.label }}</span>
+                <span style="color:#0d1117;font-weight:800;text-align:right">{{ row.val }}</span>
+              </div>
+            </sc-for>
+            <div style="font-size:13px;color:#6b7280;font-weight:600;line-height:1.6;margin-top:12px">{{ c.checkout.qrHint }}</div>
+          </div>
+        </div>
+        <button style="background:#0d1117;color:#f7d65a;font-size:15px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit" style-hover="background:#1a2230" onClick="{{ backToShop }}">{{ c.confirm.home }}</button>
+      </div>
+    </section>
+  </sc-if>
+
+  <sc-if value="{{ isShopView }}" hint-placeholder-val="{{ true }}">
+  <div>
 
   <!-- HERO -->
   <section style="background:#0d1117;color:#fff;padding:96px 24px 80px;position:relative;overflow:hidden">
@@ -194,8 +345,19 @@
       <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:8px">{{ c.product.title }}</h2>
       <p style="font-size:16px;color:#6b7280;margin-bottom:48px;font-weight:600">{{ c.product.subtitle }}</p>
       <div style="display:grid;grid-template-columns:{{ productCols }};gap:56px;align-items:start">
-        <div style="border-radius:20px;overflow:hidden;aspect-ratio:1/1">
-          <image-slot id="product-photo" shape="rect" fit="contain" placeholder="Drop product bundle photo here"></image-slot>
+        <div style="position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1/1;background:#fff;touch-action:pan-y" onMouseEnter="{{ pauseCarousel }}" onMouseLeave="{{ resumeCarousel }}" onTouchStart="{{ carouselTouchStart }}" onTouchEnd="{{ carouselTouchEnd }}">
+          <div style="{{ carouselTrackStyle }}">
+            <sc-for list="{{ carouselSlides }}" as="slide" hint-placeholder-count="8">
+              <img src="{{ slide.src }}" alt="{{ slide.alt }}" loading="lazy" decoding="async" draggable="false" style="width:100%;height:100%;flex-shrink:0;object-fit:cover;display:block;user-select:none" />
+            </sc-for>
+          </div>
+          <button aria-label="Previous" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.9);color:#0d1117;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;font-family:inherit" style-hover="background:#f7d65a" onClick="{{ prevSlide }}">‹</button>
+          <button aria-label="Next" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:none;background:rgba(255,255,255,0.9);color:#0d1117;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 2px 12px rgba(0,0,0,0.15);display:flex;align-items:center;justify-content:center;font-family:inherit" style-hover="background:#f7d65a" onClick="{{ nextSlide }}">›</button>
+          <div style="position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;gap:8px">
+            <sc-for list="{{ carouselSlides }}" as="slide" hint-placeholder-count="8">
+              <button aria-label="{{ slide.alt }}" style="{{ slide.dotStyle }}" onClick="{{ slide.go }}"></button>
+            </sc-for>
+          </div>
         </div>
         <div>
           <ul style="list-style:none;padding:0;margin:0 0 28px">
@@ -215,74 +377,48 @@
             <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">{{ c.priceLabel }}</div>
             <div style="font-size:24px;font-weight:900;color:#f7d65a;letter-spacing:-0.5px;margin-bottom:4px">{{ c.product.price }}</div>
             <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;font-weight:500">{{ c.product.priceSub }}</div>
-            <button style="background:#f7d65a;color:#0d1117;font-size:15px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.product.cta }}</button>
+            <div style="display:flex;gap:12px;align-items:stretch">
+              <div style="display:flex;align-items:center;background:rgba(255,255,255,0.08);border-radius:50px;padding:4px;flex-shrink:0" aria-label="{{ c.shop.qty }}">
+                <button aria-label="−" style="width:40px;height:40px;border-radius:50%;border:none;background:none;color:#fff;font-size:20px;font-weight:700;cursor:pointer;font-family:inherit" style-hover="background:rgba(255,255,255,0.12)" onClick="{{ kitQtyDown }}">−</button>
+                <span style="min-width:28px;text-align:center;font-size:16px;font-weight:800">{{ kitQty }}</span>
+                <button aria-label="+" style="width:40px;height:40px;border-radius:50%;border:none;background:none;color:#fff;font-size:20px;font-weight:700;cursor:pointer;font-family:inherit" style-hover="background:rgba(255,255,255,0.12)" onClick="{{ kitQtyUp }}">+</button>
+              </div>
+              <button style="background:#f7d65a;color:#0d1117;font-size:15px;font-weight:800;padding:16px 24px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;flex:1" style-hover="background:#d4b020" onClick="{{ addKit }}">{{ c.shop.addToCart }}</button>
+            </div>
+          </div>
+          <div style="margin-top:16px;background:#fff;border:1.5px solid #eef0f3;border-radius:14px;padding:20px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px">
+              <div style="display:inline-block;background:#fdf6e3;color:#a8860f;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:8px">{{ c.shop.addonBadge }}</div>
+              <div style="font-size:16px;font-weight:800;color:#0d1117;margin-bottom:4px">{{ c.products.battery }}</div>
+              <div style="font-size:13px;color:#6b7280;font-weight:600;line-height:1.5;margin-bottom:8px">{{ c.shop.batteryDesc }}</div>
+              <div style="font-size:16px;font-weight:900;color:#0d1117">{{ batteryPriceFmt }}</div>
+            </div>
+            <button style="background:#0d1117;color:#f7d65a;font-size:14px;font-weight:800;padding:14px 22px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;white-space:nowrap" style-hover="background:#1a2230" onClick="{{ addBattery }}">{{ c.shop.addAddon }}</button>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Hidden target so the Google Form POST below doesn't navigate the page away -->
-  <iframe name="gform-target" style="display:none" title="form submit target"></iframe>
-
-  <!-- ORDER -->
-  <section style="padding:88px 24px" id="order">
+  <!-- FACTSHEETS -->
+  <section style="padding:88px 24px" id="factsheets">
     <div style="max-width:1160px;margin:0 auto">
-      <div style="display:grid;grid-template-columns:{{ orderCols }};gap:56px;align-items:start">
-        <div style="padding:36px;background:#0d1117;border-radius:20px;color:#fff">
-          <h3 style="font-size:28px;font-weight:900;letter-spacing:-0.6px;margin-bottom:12px;line-height:1.15">{{ c.order.title }}</h3>
-          <p style="font-size:15px;color:rgba(255,255,255,0.55);line-height:1.7;font-weight:500;margin-bottom:32px">{{ c.order.subtitle }}</p>
-          <sc-for list="{{ c.product.includes }}" as="item" hint-placeholder-count="5">
-            <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:14px">
-              <div style="width:8px;height:8px;background:#f7d65a;border-radius:50%;flex-shrink:0;margin-top:6px"></div>
-              <div style="font-size:14px;color:rgba(255,255,255,0.6);font-weight:600;line-height:1.5">{{ item }}</div>
+      <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.factsheets.eyebrow }}</div>
+      <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:40px">{{ c.factsheets.title }}</h2>
+      <div style="display:grid;gap:40px">
+        <sc-for list="{{ c.factsheets.groups }}" as="group" hint-placeholder-count="2">
+          <div>
+            <h3 style="font-size:18px;font-weight:800;color:#0d1117;letter-spacing:-0.3px;margin:0 0 16px">{{ group.title }}</h3>
+            <div style="display:grid;gap:12px">
+              <sc-for list="{{ group.items }}" as="doc" hint-placeholder-count="3">
+                <a href="{{ doc.url }}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:16px;justify-content:space-between;background:#f6f7f9;border:1.5px solid #eef0f3;border-radius:14px;padding:20px 24px;text-decoration:none" style-hover="border-color:#1a6e3c;background:#eef0f3">
+                  <div style="font-size:15px;font-weight:800;color:#0d1117">{{ doc.name }}</div>
+                  <div style="font-size:13px;font-weight:800;color:#1a6e3c;white-space:nowrap">{{ c.factsheets.cta }} →</div>
+                </a>
+              </sc-for>
             </div>
-          </sc-for>
-        </div>
-        <div>
-          <div style="font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#1a6e3c;margin-bottom:12px">{{ c.order.eyebrow }}</div>
-          <h2 style="font-size:clamp(22px,3vw,32px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:28px">{{ c.order.title }}</h2>
-          <sc-if value="{{ isSuccess }}" hint-placeholder-val="{{ false }}">
-            <div style="background:#eaf4ee;color:#1a6e3c;border-radius:9px;padding:20px 24px;font-size:16px;font-weight:700;text-align:center">{{ c.order.success }}</div>
-          </sc-if>
-          <sc-if value="{{ isNotSuccess }}" hint-placeholder-val="{{ true }}">
-            <div>
-              <sc-if value="{{ isError }}" hint-placeholder-val="{{ false }}">
-                <div style="background:#fef2f2;color:#b91c1c;border-radius:9px;padding:12px 16px;font-size:14px;font-weight:600;margin-bottom:14px">{{ c.order.required }}</div>
-              </sc-if>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.name }} *</label>
-                <input style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.name }}" onChange="{{ updName }}">
-              </div>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.phone }} *</label>
-                <input type="tel" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.phone }}" onChange="{{ updPhone }}">
-              </div>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.email }}</label>
-                <input type="email" style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.email }}" onChange="{{ updEmail }}">
-              </div>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.address }} *</label>
-                <input style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" style-focus="border-color:#f7d65a" value="{{ form.address }}" onChange="{{ updAddress }}">
-              </div>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.locType }}</label>
-                <select style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117" value="{{ form.loc }}" onChange="{{ updLoc }}">
-                  <option value="">---</option>
-                  <sc-for list="{{ c.order.locOpts }}" as="o" hint-placeholder-count="4">
-                    <option value="{{ o }}">{{ o }}</option>
-                  </sc-for>
-                </select>
-              </div>
-              <div style="margin-bottom:14px">
-                <label style="font-size:13px;font-weight:700;color:#374151;margin-bottom:6px;display:block">{{ c.order.note }}</label>
-                <textarea style="width:100%;padding:13px 16px;font-size:15px;font-family:inherit;font-weight:600;border:2px solid #eef0f3;border-radius:9px;outline:none;background:#fff;color:#0d1117;min-height:80px;resize:vertical" style-focus="border-color:#f7d65a" value="{{ form.note }}" onChange="{{ updNote }}"></textarea>
-              </div>
-              <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%;margin-top:4px" style-hover="background:#d4b020" onClick="{{ handleSubmit }}">{{ c.order.submit }}</button>
-            </div>
-          </sc-if>
-        </div>
+          </div>
+        </sc-for>
       </div>
     </div>
   </section>
@@ -317,6 +453,9 @@
     </div>
     <a href="https://instagram.com/smartsolarvn" target="_blank" rel="noopener noreferrer" style="background:#0d1117;color:#f7d65a;font-size:15px;font-weight:800;padding:14px 36px;border-radius:50px;text-decoration:none;display:inline-block" style-hover="background:#1a2230">{{ c.ig.cta }} →</a>
   </div>
+
+  </div>
+  </sc-if>
 
   <!-- FOOTER -->
   <footer style="background:#161d27;padding:52px 24px 96px">
@@ -355,6 +494,68 @@
         <div style="font-size:16px;font-weight:800;color:#f7d65a">{{ c.mobileBar.value }}</div>
       </div>
       <button style="background:#f7d65a;color:#0d1117;font-size:14px;font-weight:800;padding:12px 24px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;white-space:nowrap" style-hover="background:#d4b020" onClick="{{ goOrder }}">{{ c.nav.order }}</button>
+    </div>
+  </sc-if>
+
+  <!-- FLOATING ZALO BUTTON -->
+  <div style="{{ zaloWrapStyle }}">
+    <sc-if value="{{ showZaloTip }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;background:#0d1117;color:#fff;font-size:14px;font-weight:600;padding:10px 16px;border-radius:10px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2)">
+        {{ c.zalo }}
+        <div style="position:absolute;right:-6px;top:50%;width:12px;height:12px;background:#0d1117;transform:translateY(-50%) rotate(45deg)"></div>
+      </div>
+    </sc-if>
+    <a href="https://zalo.me/343194790" target="_blank" rel="noopener noreferrer" aria-label="{{ c.zalo }}" style="width:60px;height:60px;display:block;flex-shrink:0;transition:transform 0.2s" style-hover="transform:scale(1.08)" onMouseEnter="{{ showZalo }}" onMouseLeave="{{ hideZalo }}" onClick="{{ trackZalo }}">
+      <img src="uploads/zalo-logo.webp" alt="" width="60" height="60" style="width:100%;height:100%;display:block;filter:drop-shadow(0 4px 12px rgba(0,104,255,0.35)) drop-shadow(0 1px 3px rgba(0,0,0,0.15))" />
+    </a>
+  </div>
+
+  <!-- BASKET DRAWER -->
+  <sc-if value="{{ cartOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:400;font-family:'Manrope',sans-serif">
+      <div style="position:absolute;inset:0;background:rgba(13,17,23,0.5)" onClick="{{ closeCart }}"></div>
+      <div role="dialog" aria-modal="true" aria-label="{{ c.cart.title }}" style="position:absolute;top:0;right:0;bottom:0;width:100%;max-width:420px;background:#fff;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.2)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #eef0f3">
+          <div style="font-size:20px;font-weight:900;color:#0d1117">{{ c.cart.title }}</div>
+          <button aria-label="{{ c.cart.close }}" style="width:36px;height:36px;border-radius:50%;border:none;background:#f6f7f9;color:#0d1117;font-size:18px;cursor:pointer;font-family:inherit" style-hover="background:#eef0f3" onClick="{{ closeCart }}">✕</button>
+        </div>
+        <div style="flex:1;overflow-y:auto;padding:8px 24px">
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:48px 0;text-align:center;font-size:15px;color:#6b7280;font-weight:600">{{ c.cart.empty }}</div>
+          </sc-if>
+          <sc-for list="{{ cartLines }}" as="line" hint-placeholder-count="2">
+            <div style="padding:16px 0;border-bottom:1px solid #eef0f3">
+              <div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:10px">
+                <div>
+                  <div style="font-size:15px;font-weight:800;color:#0d1117">{{ line.name }}</div>
+                  <div style="font-size:13px;color:#6b7280;font-weight:600;margin-top:2px">{{ line.unit }}</div>
+                </div>
+                <div style="font-size:15px;font-weight:800;color:#0d1117;white-space:nowrap">{{ line.total }}</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;border:1.5px solid #eef0f3;border-radius:50px;padding:2px">
+                  <button aria-label="−" style="width:32px;height:32px;border-radius:50%;border:none;background:none;color:#0d1117;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit" style-hover="background:#f6f7f9" onClick="{{ line.dec }}">−</button>
+                  <span style="min-width:26px;text-align:center;font-size:14px;font-weight:800;color:#0d1117">{{ line.qty }}</span>
+                  <button aria-label="+" style="width:32px;height:32px;border-radius:50%;border:none;background:none;color:#0d1117;font-size:18px;font-weight:700;cursor:pointer;font-family:inherit" style-hover="background:#f6f7f9" onClick="{{ line.inc }}">+</button>
+                </div>
+                <button style="background:none;border:none;font-family:inherit;font-size:13px;font-weight:700;color:#6b7280;cursor:pointer;text-decoration:underline" style-hover="color:#b91c1c" onClick="{{ line.remove }}">{{ c.cart.remove }}</button>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:20px 24px;border-top:1px solid #eef0f3">
+          <sc-if value="{{ hasCartItems }}" hint-placeholder-val="{{ true }}">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:17px;font-weight:900;color:#0d1117">
+                <span>{{ c.cart.subtotal }}</span><span>{{ cartTotalFmt }}</span>
+              </div>
+              <div style="font-size:13px;color:#6b7280;font-weight:600;margin:4px 0 16px">{{ c.cart.vatNote }}</div>
+              <button style="background:#f7d65a;color:#0d1117;font-size:16px;font-weight:800;padding:16px 32px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;width:100%;margin-bottom:8px" style-hover="background:#d4b020" onClick="{{ goCheckout }}">{{ c.cart.checkout }}</button>
+            </div>
+          </sc-if>
+          <button style="background:none;border:none;font-family:inherit;font-size:14px;font-weight:700;color:#1a6e3c;cursor:pointer;width:100%;padding:8px" style-hover="color:#145c30" onClick="{{ continueShopping }}">{{ c.cart.continue }}</button>
+        </div>
+      </div>
     </div>
   </sc-if>
 
@@ -430,15 +631,56 @@ const T = {
       price: "11.000.000₫", priceSub: "Đã bao gồm VAT — ưu đãi đặc biệt cho 50 khách hàng đầu tiên", cta: "Đặt hàng ngay",
     },
     priceLabel: "Giá",
-    order: {
-      eyebrow: "Đặt hàng", title: "Bắt đầu tiết kiệm tiền điện ngay hôm nay",
-      subtitle: "Điền thông tin và đội ngũ SmartSolar sẽ liên hệ trong vòng 24h.",
+    products: { kit: "SmartSolar Mini 920W", battery: "Pin lưu trữ HiBattery 1920 AC" },
+    shop: {
+      qty: "Số lượng", addToCart: "Thêm vào giỏ hàng",
+      addonBadge: "Phụ kiện thêm", addAddon: "Thêm vào giỏ",
+      batteryDesc: "Pin lưu trữ 1,92 kWh — vẫn có điện khi mất điện lưới.",
+    },
+    cart: {
+      title: "Giỏ hàng", empty: "Giỏ hàng của bạn đang trống.", close: "Đóng",
+      remove: "Xóa", each: "/ cái", subtotal: "Tạm tính", vatNote: "Đã bao gồm VAT",
+      checkout: "Thanh toán", continue: "Tiếp tục mua sắm",
+    },
+    checkout: {
+      back: "Quay lại cửa hàng", title: "Thanh toán",
+      contact: "Thông tin liên hệ", delivery: "Địa chỉ lắp đặt", payment: "Phương thức thanh toán",
       name: "Họ và tên", phone: "Số điện thoại", email: "Email",
       address: "Địa chỉ lắp đặt", locType: "Vị trí lắp đặt",
       locOpts: ["Ban công chung cư", "Mái nhà (nhà phố)", "Sân thượng", "Khác"],
-      note: "Ghi chú thêm", submit: "Gửi đơn đặt hàng",
-      success: "✅ Cảm ơn bạn! Chúng tôi sẽ liên hệ trong 24h.",
-      required: "Vui lòng điền đầy đủ họ tên, số điện thoại và địa chỉ.",
+      note: "Ghi chú thêm",
+      bankTransfer: "Chuyển khoản ngân hàng (QR)", bankTransferSub: "Quét mã VietQR bằng ứng dụng ngân hàng của bạn",
+      qrAlt: "Mã QR chuyển khoản (mẫu)",
+      mockup: "BẢN MẪU — chưa phải tài khoản thật. Vui lòng không chuyển tiền.",
+      bank: "Ngân hàng", account: "Số tài khoản", holder: "Chủ tài khoản", amount: "Số tiền", reference: "Nội dung chuyển khoản",
+      mockBank: "Ngân hàng mẫu (MOCKUP)",
+      qrHint: "Vui lòng ghi đúng nội dung chuyển khoản để chúng tôi xác nhận đơn hàng của bạn.",
+      summary: "Đơn hàng của bạn", total: "Tổng cộng", orderRef: "Mã đơn hàng",
+      place: "Đặt hàng", placing: "Đang gửi…",
+      secureNote: "SmartSolar không bao giờ hỏi mật khẩu hay mã OTP ngân hàng của bạn.",
+      errRequired: "Vui lòng điền họ tên, số điện thoại và địa chỉ.",
+      errPhone: "Số điện thoại không hợp lệ.", errEmail: "Email không hợp lệ.",
+      errPayment: "Vui lòng chọn phương thức thanh toán.",
+      errSubmit: "Không gửi được đơn hàng. Vui lòng thử lại hoặc liên hệ qua Zalo.",
+    },
+    confirm: {
+      title: "Cảm ơn bạn đã đặt hàng!",
+      body: "Sau khi nhận được chuyển khoản, đội ngũ SmartSolar sẽ liên hệ trong vòng 24h để xác nhận và hẹn lịch giao hàng.",
+      payNow: "Thanh toán bằng chuyển khoản", home: "Về trang chủ",
+    },
+    factsheets: {
+      eyebrow: "Tài liệu", title: "Thông số kỹ thuật sản phẩm", cta: "Tải xuống (PDF)",
+      groups: [
+        { title: "Bảng thông số", items: [
+          { name: "Tấm pin mặt trời JA Solar 460W", url: "uploads/factsheets/JAM72D20_MB.pdf" },
+          { name: "Micro inverter HF-800-WB", url: "uploads/factsheets/Hoymiles_Datasheet_HF-800-WB_Global_EN_REV1.3.pdf" },
+          { name: "Pin lưu trữ HiBattery 1920 AC", url: "uploads/factsheets/Datasheet_HB-1920-AC-SV_Global_EN_REV1.1_c4724fba-eee9-4e18-854e-9e60aa551c7a.pdf" },
+        ] },
+        { title: "Hướng dẫn sử dụng", items: [
+          { name: "Micro inverter HF-800-WB", url: "uploads/factsheets/Hoymiles_User_Manual_HF-800-WB_UK_EN_REV1.1.pdf" },
+          { name: "Pin lưu trữ HiBattery 1920 AC", url: "uploads/factsheets/User_Manual_HB-1920-AC-SV_Global_EN_DE_FR_NL_REV1.1_fa6c8081-112b-4f55-b741-d2a39c8dcfe2.pdf" },
+        ] },
+      ],
     },
     faq: {
       eyebrow: "FAQ", title: "Câu hỏi thường gặp",
@@ -457,6 +699,7 @@ const T = {
     },
     ig: { title: "Theo dõi hành trình của chúng tôi", handle: "@smartsolarvn", cta: "Xem trên Instagram" },
     mobileBar: { label: "Tiết kiệm ước tính", value: "~600K₫/tháng" },
+    zalo: "Liên hệ với chúng tôi qua Zalo",
     footer: {
       company: "CÔNG TY TNHH NĂNG LƯỢNG MẶT TRỜI SMARTSOLAR",
       reg: "Giấy chứng nhận ĐKDN số 0318442962 do Sở KH&ĐT TP.HCM cấp ngày 07/05/2024",
@@ -531,15 +774,56 @@ const T = {
       price: "11,000,000₫", priceSub: "VAT included — special offer for the first 50 customers", cta: "Order now",
     },
     priceLabel: "Price",
-    order: {
-      eyebrow: "Order", title: "Start saving on electricity today",
-      subtitle: "Fill in your details and the SmartSolar team will contact you within 24h.",
+    products: { kit: "SmartSolar Mini 920W", battery: "HiBattery 1920 AC battery" },
+    shop: {
+      qty: "Quantity", addToCart: "Add to basket",
+      addonBadge: "Add-on", addAddon: "Add to basket",
+      batteryDesc: "1.92 kWh storage battery — keep power during grid outages.",
+    },
+    cart: {
+      title: "Basket", empty: "Your basket is empty.", close: "Close",
+      remove: "Remove", each: "each", subtotal: "Subtotal", vatNote: "VAT included",
+      checkout: "Checkout", continue: "Continue shopping",
+    },
+    checkout: {
+      back: "Back to shop", title: "Checkout",
+      contact: "Contact details", delivery: "Installation address", payment: "Payment method",
       name: "Full name", phone: "Phone number", email: "Email",
       address: "Installation address", locType: "Installation location",
       locOpts: ["Apartment balcony", "Townhouse rooftop", "Terrace / rooftop garden", "Other"],
-      note: "Additional notes", submit: "Submit order",
-      success: "✅ Thank you! We'll be in touch within 24h.",
-      required: "Please fill in your name, phone number and address.",
+      note: "Additional notes",
+      bankTransfer: "Bank transfer (QR)", bankTransferSub: "Scan the VietQR code with your banking app",
+      qrAlt: "Bank transfer QR code (mockup)",
+      mockup: "MOCKUP — not a real account. Please do not transfer money.",
+      bank: "Bank", account: "Account number", holder: "Account holder", amount: "Amount", reference: "Transfer reference",
+      mockBank: "Sample Bank (MOCKUP)",
+      qrHint: "Please use the exact transfer reference so we can match your payment to your order.",
+      summary: "Your order", total: "Total", orderRef: "Order number",
+      place: "Place order", placing: "Sending…",
+      secureNote: "SmartSolar will never ask for your bank password or OTP code.",
+      errRequired: "Please fill in your name, phone number and address.",
+      errPhone: "Please enter a valid phone number.", errEmail: "Please enter a valid email address.",
+      errPayment: "Please choose a payment method.",
+      errSubmit: "We couldn't send your order. Please try again or contact us on Zalo.",
+    },
+    confirm: {
+      title: "Thank you for your order!",
+      body: "Once we receive your transfer, the SmartSolar team will contact you within 24h to confirm and schedule delivery.",
+      payNow: "Pay by bank transfer", home: "Back to home",
+    },
+    factsheets: {
+      eyebrow: "Documentation", title: "Product factsheets", cta: "Download (PDF)",
+      groups: [
+        { title: "Data sheets", items: [
+          { name: "JA Solar 460W solar panels", url: "uploads/factsheets/JAM72D20_MB.pdf" },
+          { name: "HF-800-WB microinverter", url: "uploads/factsheets/Hoymiles_Datasheet_HF-800-WB_Global_EN_REV1.3.pdf" },
+          { name: "HiBattery 1920 AC battery", url: "uploads/factsheets/Datasheet_HB-1920-AC-SV_Global_EN_REV1.1_c4724fba-eee9-4e18-854e-9e60aa551c7a.pdf" },
+        ] },
+        { title: "User manuals", items: [
+          { name: "HF-800-WB microinverter", url: "uploads/factsheets/Hoymiles_User_Manual_HF-800-WB_UK_EN_REV1.1.pdf" },
+          { name: "HiBattery 1920 AC battery", url: "uploads/factsheets/User_Manual_HB-1920-AC-SV_Global_EN_DE_FR_NL_REV1.1_fa6c8081-112b-4f55-b741-d2a39c8dcfe2.pdf" },
+        ] },
+      ],
     },
     faq: {
       eyebrow: "FAQ", title: "Frequently asked questions",
@@ -558,6 +842,7 @@ const T = {
     },
     ig: { title: "Follow our journey", handle: "@smartsolarvn", cta: "View on Instagram" },
     mobileBar: { label: "Estimated savings", value: "~600K₫/month" },
+    zalo: "Chat with us on Zalo",
     footer: {
       company: "SMARTSOLAR ENERGY COMPANY LIMITED",
       reg: "Business registration no. 0318442962, issued by HCMC Department of Planning and Investment, 07/05/2024",
@@ -578,12 +863,68 @@ const MEDIA_LOGOS = [
   { name: "Vietnam Investment Review", url: "https://vir.com.vn/smartsolar-bags-185-million-in-seed-funding-123943.html", img: "uploads/Vietnam investment Review.svg" },
 ];
 
+// Meta Pixel event; fbq may be missing when an ad blocker stops the pixel script
+const trackPixel = (event, params) => { if (typeof window.fbq === "function") window.fbq("track", event, params); };
+
+// Web-sized copies of uploads/carousel/VN - MiniSolar and EN - MiniSolar
+const CAROUSEL_SLIDES = ["cover_2", "4", "5", "6", "7", "8", "9", "qr_2"];
+const CAROUSEL_COUNT = CAROUSEL_SLIDES.length;
+const carouselImages = (lang) => CAROUSEL_SLIDES.map((name) => `uploads/carousel/web/${lang}/${name}.jpg`);
+const CAROUSEL_INTERVAL = 4500;
+
+// Prices in VND. Only product ids and quantities are kept in the basket, never prices,
+// so a visitor can't change what they pay by editing their browser storage.
+const PRODUCTS = {
+  kit: { price: 11000000 },
+  battery: { price: 21000000 },
+};
+const MAX_QTY = 10;
+const CART_KEY = "smartsolar-cart";
+
+// Placeholder bank details shown next to the mockup QR. Replace with the real account before going live.
+const MOCK_BANK = { account: "0000 0000 0000", holder: "CONG TY TNHH NANG LUONG MAT TROI SMARTSOLAR" };
+
+const fmtVND = (n, lang) => n.toLocaleString(lang === "vi" ? "vi-VN" : "en-US") + "₫";
+const cartTotal = (cart) => Object.entries(cart).reduce((sum, [id, qty]) => sum + PRODUCTS[id].price * qty, 0);
+const cartCount = (cart) => Object.values(cart).reduce((sum, qty) => sum + qty, 0);
+
+const loadCart = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(CART_KEY) || "{}");
+    return Object.fromEntries(Object.entries(saved)
+      .filter(([id, qty]) => PRODUCTS[id] && Number.isInteger(qty) && qty > 0)
+      .map(([id, qty]) => [id, Math.min(qty, MAX_QTY)]));
+  } catch { return {}; }
+};
+const saveCart = (cart) => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch {} };
+
+// e.g. SS7K2QXM, used as the bank transfer reference
+const newOrderRef = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const bytes = crypto.getRandomValues(new Uint8Array(6));
+  return "SS" + Array.from(bytes, (b) => chars[b % chars.length]).join("");
+};
+
+// Fake QR pattern with a MOCKUP band across it: looks like a VietQR code but no banking app can read it.
+const mockQrSrc = (seed) => {
+  let h = 2166136261;
+  for (const ch of seed) h = Math.imul(h ^ ch.charCodeAt(0), 16777619);
+  const rand = () => { h = (h + 0x6D2B79F5) | 0; let t = Math.imul(h ^ (h >>> 15), 1 | h); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const N = 29;
+  const inFinder = (x, y) => (x < 8 && y < 8) || (x >= N - 8 && y < 8) || (x < 8 && y >= N - 8);
+  let cells = "";
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) if (!inFinder(x, y) && rand() < 0.5) cells += `M${x} ${y}h1v1h-1z`;
+  const finder = (x, y) => `<rect x="${x}" y="${y}" width="7" height="7" fill="#0d1117"/><rect x="${x + 1}" y="${y + 1}" width="5" height="5" fill="#fff"/><rect x="${x + 2}" y="${y + 2}" width="3" height="3" fill="#0d1117"/>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 ${N + 4} ${N + 4}" shape-rendering="crispEdges"><rect x="-2" y="-2" width="${N + 4}" height="${N + 4}" fill="#fff"/><path d="${cells}" fill="#0d1117"/>${finder(0, 0)}${finder(N - 7, 0)}${finder(0, N - 7)}<rect x="3" y="${N / 2 - 2.5}" width="${N - 6}" height="5" rx="1" fill="#fff" stroke="#b91c1c" stroke-width="0.4"/><text x="${N / 2}" y="${N / 2 + 1.2}" text-anchor="middle" font-family="Arial,sans-serif" font-size="3.4" font-weight="700" fill="#b91c1c">MOCKUP</text></svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+};
+
 // --- Google Form wiring ---------------------------------------------------
-// Order form submissions POST into this Google Form (see submitToGoogleForm
-// below); responses land in its linked Sheet. To point this at a different
-// form: open it, ⋮ menu → "Get pre-filled link", fill every question with a
-// dummy answer, copy the link, and pull the form ID + each entry.NNNNNNN
-// param out of it into the two constants below.
+// Orders go into the same Google Form as the live site (shop.smartsolar.com.vn); its
+// "Google Form Notifications" add-on emails each response to the team. The form only has the
+// six questions below, so the order number, items, total and payment method go at the start
+// of the Note answer. To point this at a different form: open it, ⋮ menu → "Get pre-filled link",
+// fill every question with a dummy answer, and copy the form ID + each entry.NNNNNNN from the link.
 const GOOGLE_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSd9yOboYVjbew1HbRIotDirob8ucOTxwtrK04s0x-ENAJgapw/formResponse";
 const GOOGLE_FORM_ENTRIES = {
   name: "entry.612048439",
@@ -594,12 +935,66 @@ const GOOGLE_FORM_ENTRIES = {
   note: "entry.1373791809",
 };
 
+// The total is worked out in the visitor's browser, so the note lists quantities and unit prices:
+// check the total against them before confirming an order.
+const orderNote = (order) => {
+  const vi = T.vi;
+  const items = order.items.map(({ id, qty }) => `${qty} × ${vi.products[id]} @ ${fmtVND(PRODUCTS[id].price, "vi")}`).join("; ");
+  const payment = order.payMethod === "bank" ? `Chuyển khoản (nội dung: ${order.ref})` : order.payMethod;
+  return [
+    `ĐƠN HÀNG ${order.ref}`,
+    `Sản phẩm: ${items}`,
+    `Tổng cộng: ${fmtVND(order.total, "vi")}`,
+    `Thanh toán: ${payment}`,
+    `Ngôn ngữ: ${order.lang.toUpperCase()}`,
+    `Ghi chú của khách: ${order.customer.note || "—"}`,
+  ].join("\n");
+};
+
+// POSTs through a hidden <form> into a hidden iframe, like the live site. Google Forms sends no
+// CORS headers, so this is fire-and-forget: the page can't tell whether Google accepted the response.
+const submitOrder = async (order) => {
+  let frame = document.querySelector('iframe[name="gform-target"]');
+  if (!frame) {
+    frame = document.createElement("iframe");
+    frame.name = "gform-target";
+    frame.style.display = "none";
+    document.body.appendChild(frame);
+  }
+  const values = {
+    [GOOGLE_FORM_ENTRIES.name]: order.customer.name,
+    [GOOGLE_FORM_ENTRIES.phone]: order.customer.phone,
+    [GOOGLE_FORM_ENTRIES.email]: order.customer.email,
+    [GOOGLE_FORM_ENTRIES.address]: order.customer.address,
+    [GOOGLE_FORM_ENTRIES.loc]: order.customer.loc,
+    [GOOGLE_FORM_ENTRIES.note]: orderNote(order),
+  };
+  const el = document.createElement("form");
+  el.action = GOOGLE_FORM_ACTION;
+  el.method = "POST";
+  el.target = "gform-target";
+  el.style.display = "none";
+  for (const [entry, value] of Object.entries(values)) {
+    const input = document.createElement("textarea"); // keeps the note's line breaks
+    input.name = entry;
+    input.value = value ?? "";
+    el.appendChild(input);
+  }
+  document.body.appendChild(el);
+  el.submit();
+  el.remove();
+};
+
 class Component extends DCLogic {
   state = {
     lang: "vi", openFaq: null, scrolled: false,
-    form: { name: "", phone: "", email: "", address: "", loc: "", note: "" },
-    formState: "idle",
+    slide: 0,
     windowWidth: typeof window !== "undefined" ? window.innerWidth : 1200,
+    view: "shop", // shop | checkout | confirm
+    cart: loadCart(), cartOpen: false, kitQty: 1,
+    checkout: { name: "", phone: "", email: "", address: "", loc: "", note: "" },
+    payMethod: null, checkoutError: null, placing: false,
+    orderRef: null, placedOrder: null,
   };
 
   componentDidMount() {
@@ -607,51 +1002,125 @@ class Component extends DCLogic {
     window.addEventListener("resize", this._onResize);
     this._onScroll = () => this.setState({ scrolled: window.scrollY > 480 });
     window.addEventListener("scroll", this._onScroll);
+    // Browser back button leaves the checkout / confirmation page
+    this._onPop = () => { if (location.hash !== "#checkout" && this.state.view !== "shop") this.setState({ view: "shop" }); };
+    window.addEventListener("popstate", this._onPop);
+    this._onKey = (e) => { if (e.key === "Escape" && this.state.cartOpen) this.closeCart(); };
+    window.addEventListener("keydown", this._onKey);
+    if (location.hash === "#checkout" || location.hash === "#order-placed") history.replaceState(null, "", location.pathname + location.search);
+    this.startCarousel();
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this._onResize);
     window.removeEventListener("scroll", this._onScroll);
+    window.removeEventListener("popstate", this._onPop);
+    window.removeEventListener("keydown", this._onKey);
+    this.stopCarousel();
   }
 
   scrollTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
 
-  // Submits `form` to the Google Form's response endpoint via a hidden
-  // <form>/<iframe> POST. This is fire-and-forget: Google Forms doesn't
-  // send CORS headers, so we can't read a response back, but the browser
-  // POST itself isn't blocked by CORS the way a fetch() read would be.
-  submitToGoogleForm(form) {
-    if (GOOGLE_FORM_ACTION.includes("REPLACE_WITH_YOUR_FORM_ID")) {
-      console.warn("Google Form not configured yet — set GOOGLE_FORM_ACTION and GOOGLE_FORM_ENTRIES.");
-      return;
-    }
-    const values = {
-      [GOOGLE_FORM_ENTRIES.name]: form.name,
-      [GOOGLE_FORM_ENTRIES.phone]: form.phone,
-      [GOOGLE_FORM_ENTRIES.email]: form.email,
-      [GOOGLE_FORM_ENTRIES.address]: form.address,
-      [GOOGLE_FORM_ENTRIES.loc]: form.loc,
-      [GOOGLE_FORM_ENTRIES.note]: form.note,
+  setCart(cart) { saveCart(cart); this.setState({ cart }); }
+  setQty(id, qty) {
+    const cart = { ...this.state.cart };
+    if (qty <= 0) delete cart[id]; else cart[id] = Math.min(qty, MAX_QTY);
+    this.setCart(cart);
+  }
+  addToCart(id, qty) {
+    this.setQty(id, (this.state.cart[id] || 0) + qty);
+    this.openCart();
+    trackPixel("AddToCart", { content_ids: [id], content_type: "product", value: PRODUCTS[id].price * qty, currency: "VND" });
+  }
+  openCart() { document.body.style.overflow = "hidden"; this.setState({ cartOpen: true }); }
+  closeCart() { document.body.style.overflow = ""; this.setState({ cartOpen: false }); }
+
+  // Back to the landing page, optionally scrolling to a section once it has rendered
+  showShop(sectionId) {
+    this.closeCart();
+    if (this.state.view === "shop") { if (sectionId) this.scrollTo(sectionId); return; }
+    if (location.hash) history.replaceState(null, "", location.pathname + location.search);
+    this.setState({ view: "shop" });
+    setTimeout(() => (sectionId ? this.scrollTo(sectionId) : window.scrollTo(0, 0)), 50);
+  }
+  goCheckout() {
+    const { cart, orderRef } = this.state;
+    if (!cartCount(cart)) return;
+    this.closeCart();
+    if (location.hash !== "#checkout") history.pushState(null, "", "#checkout");
+    this.setState({ view: "checkout", orderRef: orderRef || newOrderRef(), checkoutError: null });
+    window.scrollTo(0, 0);
+    trackPixel("InitiateCheckout", { content_ids: Object.keys(cart), num_items: cartCount(cart), value: cartTotal(cart), currency: "VND" });
+  }
+  async placeOrder() {
+    const { checkout: f, cart, payMethod, orderRef, lang, placing } = this.state;
+    if (placing) return;
+    const t = T[lang].checkout;
+    const phone = f.phone.replace(/[\s.()-]/g, "");
+    const email = f.email.trim();
+    let error = null;
+    if (!f.name.trim() || !phone || !f.address.trim()) error = t.errRequired;
+    else if (!/^(\+?84|0)\d{9,10}$/.test(phone)) error = t.errPhone;
+    else if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) error = t.errEmail;
+    else if (!payMethod) error = t.errPayment;
+    if (error) { this.setState({ checkoutError: error }); return; }
+
+    // The Google Form's location options are Vietnamese, so send the VI label for EN orders too.
+    const locIndex = t.locOpts.indexOf(f.loc);
+    const locVi = locIndex >= 0 ? T.vi.checkout.locOpts[locIndex] : f.loc;
+    const order = {
+      ref: orderRef, lang, payMethod,
+      items: Object.entries(cart).map(([id, qty]) => ({ id, qty })),
+      total: cartTotal(cart),
+      customer: { name: f.name.trim(), phone, email, address: f.address.trim(), loc: locVi, note: f.note.trim() },
     };
-    const el = document.createElement("form");
-    el.action = GOOGLE_FORM_ACTION;
-    el.method = "POST";
-    el.target = "gform-target";
-    el.style.display = "none";
-    for (const [entry, value] of Object.entries(values)) {
-      const input = document.createElement("input");
-      input.name = entry;
-      input.value = value ?? "";
-      el.appendChild(input);
-    }
-    document.body.appendChild(el);
-    el.submit();
-    el.remove();
+    this.setState({ placing: true, checkoutError: null });
+    try { await submitOrder(order); }
+    catch { this.setState({ placing: false, checkoutError: t.errSubmit }); return; }
+
+    trackPixel("Lead", { content_name: "SmartSolar Mini checkout", value: order.total, currency: "VND" });
+    history.replaceState(null, "", "#order-placed");
+    this.setCart({});
+    this.setState({ placing: false, view: "confirm", placedOrder: order, orderRef: null, payMethod: null });
+    window.scrollTo(0, 0);
+  }
+
+  startCarousel() {
+    this.stopCarousel();
+    this._carouselTimer = setInterval(() => this.goToSlide(this.state.slide + 1, false), CAROUSEL_INTERVAL);
+  }
+  stopCarousel() { clearInterval(this._carouselTimer); }
+  goToSlide(i, restart = true) {
+    const n = CAROUSEL_COUNT;
+    this.setState({ slide: (i + n) % n });
+    if (restart) this.startCarousel();
   }
 
   renderVals() {
-    const { lang, openFaq, form, formState, windowWidth, scrolled } = this.state;
+    const { lang, openFaq, windowWidth, scrolled, slide, zaloHover, view, cart, cartOpen, kitQty, checkout, payMethod, checkoutError, placing, orderRef, placedOrder } = this.state;
     const c = T[lang];
     const isMobile = windowWidth < 768;
+    const isShopView = view === "shop";
+
+    const cartLines = Object.entries(cart).map(([id, qty]) => ({
+      name: c.products[id], qty,
+      unit: `${fmtVND(PRODUCTS[id].price, lang)} ${c.cart.each}`,
+      total: fmtVND(PRODUCTS[id].price * qty, lang),
+      inc: () => this.setQty(id, qty + 1),
+      dec: () => this.setQty(id, qty - 1),
+      remove: () => this.setQty(id, 0),
+    }));
+    // The QR and bank details show the order being paid: the one just placed, or the one in checkout
+    const payRef = view === "confirm" ? placedOrder?.ref : orderRef;
+    const payTotal = view === "confirm" ? placedOrder?.total : cartTotal(cart);
+    const paymentRows = [
+      { label: c.checkout.bank, val: c.checkout.mockBank },
+      { label: c.checkout.account, val: MOCK_BANK.account },
+      { label: c.checkout.holder, val: MOCK_BANK.holder },
+      { label: c.checkout.amount, val: fmtVND(payTotal || 0, lang) },
+      { label: c.checkout.reference, val: payRef || "" },
+    ];
+    const isBankTransfer = payMethod === "bank";
+    const updField = (key) => (e) => this.setState({ checkout: { ...this.state.checkout, [key]: e.target.value } });
 
     const activeLang = { fontSize: 12, fontWeight: 700, padding: "4px 10px", border: "none", borderRadius: 5, cursor: "pointer", background: "#fff", color: "#0d1117", boxShadow: "0 1px 4px rgba(0,0,0,0.12)" };
     const inactiveLang = { fontSize: 12, fontWeight: 700, padding: "4px 10px", border: "none", borderRadius: 5, cursor: "pointer", background: "transparent", color: "#6b7280" };
@@ -670,16 +1139,39 @@ class Component extends DCLogic {
     const heroBenefit = { ...firstBenefit, stat: c.hero.stats[0].val };
     const restBenefits = rest.map((b, i) => ({ ...b, num: String(i + 2).padStart(2, "0") }));
 
+    const carouselSlides = carouselImages(lang).map((src, i) => ({
+      src,
+      alt: `${c.product.title} ${i + 1}/${CAROUSEL_COUNT}`,
+      dotStyle: { width: slide === i ? 22 : 8, height: 8, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: slide === i ? "#f7d65a" : "rgba(13,17,23,0.25)", transition: "all 0.3s" },
+      go: () => this.goToSlide(i),
+    }));
+
     return {
+      carouselSlides,
+      carouselTrackStyle: { display: "flex", width: "100%", height: "100%", transform: `translateX(-${slide * 100}%)`, transition: "transform 0.5s ease" },
+      prevSlide: () => this.goToSlide(slide - 1),
+      nextSlide: () => this.goToSlide(slide + 1),
+      pauseCarousel: () => this.stopCarousel(),
+      resumeCarousel: () => this.startCarousel(),
+      carouselTouchStart: (e) => { this._touchX = e.touches[0].clientX; this.stopCarousel(); },
+      carouselTouchEnd: (e) => {
+        const dx = e.changedTouches[0].clientX - (this._touchX ?? 0);
+        if (Math.abs(dx) > 40) this.goToSlide(slide + (dx < 0 ? 1 : -1));
+        else this.startCarousel();
+      },
       c, mediaLogos: MEDIA_LOGOS, mediaLoop: MEDIA_LOGOS.concat(MEDIA_LOGOS), faqItems,
       heroBenefit, restBenefits,
       benefitsGridCols: isMobile ? "1fr" : "0.9fr 1.6fr",
       isDesktop: !isMobile,
-      showMobileBar: isMobile && scrolled,
-      showDesktopFab: !isMobile && scrolled,
+      showMobileBar: isMobile && scrolled && isShopView,
+      showDesktopFab: !isMobile && scrolled && isShopView,
+      // Sits above the mobile order bar / desktop order widget when those are showing
+      zaloWrapStyle: { position: "fixed", right: isMobile ? 16 : 28, bottom: scrolled && isShopView ? (isMobile ? 84 : 124) : (isMobile ? 16 : 28), zIndex: 301, display: "flex", alignItems: "center", gap: 14, transition: "bottom 0.3s", fontFamily: "'Manrope',sans-serif" },
+      showZaloTip: !isMobile && zaloHover,
+      showZalo: () => this.setState({ zaloHover: true }),
+      hideZalo: () => this.setState({ zaloHover: false }),
       billGridCols: isMobile ? "1fr" : "1fr auto 1fr",
       productCols: isMobile ? "1fr" : "1fr 1fr",
-      orderCols: isMobile ? "1fr" : "1fr 1.1fr",
       heroStatsGap: isMobile ? "24px" : "40px",
       langViStyle: lang === "vi" ? activeLang : inactiveLang,
       langEnStyle: lang === "en" ? activeLang : inactiveLang,
@@ -689,26 +1181,52 @@ class Component extends DCLogic {
       goBenefits: () => this.scrollTo("benefits"),
       goProduct: () => this.scrollTo("product"),
       goFaq: () => this.scrollTo("faq"),
-      goOrder: () => this.scrollTo("order"),
-      form,
-      updName: (e) => this.setState({ form: { ...form, name: e.target.value } }),
-      updPhone: (e) => this.setState({ form: { ...form, phone: e.target.value } }),
-      updEmail: (e) => this.setState({ form: { ...form, email: e.target.value } }),
-      updAddress: (e) => this.setState({ form: { ...form, address: e.target.value } }),
-      updLoc: (e) => this.setState({ form: { ...form, loc: e.target.value } }),
-      updNote: (e) => this.setState({ form: { ...form, note: e.target.value } }),
-      isSuccess: formState === "success",
-      isNotSuccess: formState !== "success",
-      isError: formState === "error",
-      handleSubmit: () => {
-        if (!form.name || !form.phone || !form.address) { this.setState({ formState: "error" }); return; }
-        // The Google Form's dropdown options are Vietnamese; normalize so an
-        // EN-language submission still records a value that matches it.
-        const locIndex = c.order.locOpts.indexOf(form.loc);
-        const locVi = locIndex >= 0 ? T.vi.order.locOpts[locIndex] : form.loc;
-        this.submitToGoogleForm({ ...form, loc: locVi });
-        this.setState({ formState: "success" });
+      goOrder: () => this.showShop("product"),
+
+      // Shop + basket
+      isShopView, isCheckoutView: view === "checkout", isConfirmView: view === "confirm",
+      kitQty,
+      kitQtyDown: () => this.setState({ kitQty: Math.max(1, kitQty - 1) }),
+      kitQtyUp: () => this.setState({ kitQty: Math.min(MAX_QTY, kitQty + 1) }),
+      addKit: () => { this.addToCart("kit", kitQty); this.setState({ kitQty: 1 }); },
+      addBattery: () => this.addToCart("battery", 1),
+      batteryPriceFmt: fmtVND(PRODUCTS.battery.price, lang),
+      cartOpen, cartLines,
+      cartCount: cartCount(cart),
+      hasCartItems: cartLines.length > 0,
+      cartEmpty: cartLines.length === 0,
+      cartTotalFmt: fmtVND(cartTotal(cart), lang),
+      openCart: () => this.openCart(),
+      closeCart: () => this.closeCart(),
+      continueShopping: () => this.showShop(),
+      goCheckout: () => this.goCheckout(),
+      backToShop: () => (location.hash === "#checkout" ? history.back() : this.showShop()),
+
+      // Checkout
+      checkout,
+      upd: { name: updField("name"), phone: updField("phone"), email: updField("email"), address: updField("address"), loc: updField("loc"), note: updField("note") },
+      isBankTransfer,
+      chooseBankTransfer: () => {
+        if (!isBankTransfer) trackPixel("AddPaymentInfo", { value: cartTotal(cart), currency: "VND" });
+        this.setState({ payMethod: "bank", checkoutError: null });
       },
+      payOptionStyle: { width: "100%", display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", borderRadius: 12, cursor: "pointer", fontFamily: "inherit", background: isBankTransfer ? "#fffbea" : "#fff", border: `2px solid ${isBankTransfer ? "#f7d65a" : "#eef0f3"}` },
+      payRadioStyle: { width: 20, height: 20, borderRadius: "50%", flexShrink: 0, border: `2px solid ${isBankTransfer ? "#0d1117" : "#c8cdd6"}`, background: isBankTransfer ? "radial-gradient(circle, #0d1117 0 4px, #fff 5px)" : "#fff" },
+      qrMockSrc: mockQrSrc(payRef || "smartsolar"),
+      paymentRows,
+      orderRef,
+      placedRef: placedOrder?.ref || "",
+      hasCheckoutError: !!checkoutError, checkoutError,
+      placing,
+      placeLabel: placing ? c.checkout.placing : c.checkout.place,
+      placeOrder: () => this.placeOrder(),
+      checkoutCols: isMobile ? "1fr" : "1.5fr 1fr",
+      twoCols: isMobile ? "1fr" : "1fr 1fr",
+      qrCols: isMobile ? "1fr" : "180px 1fr",
+      confirmPad: isMobile ? "28px 20px" : "40px",
+      summaryStyle: { background: "#fff", border: "1.5px solid #eef0f3", borderRadius: 16, padding: 28, position: isMobile ? "static" : "sticky", top: 88 },
+
+      trackZalo: () => trackPixel("Contact", { content_name: "Zalo floating button" }),
     };
   }
 }
