@@ -141,7 +141,6 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
                 <div style="margin-top:16px;display:grid;grid-template-columns:{{ qrCols }};gap:20px;align-items:center;background:#f6f7f9;border-radius:12px;padding:20px">
                   <div style="justify-self:center;text-align:center">
                     <img src="uploads/payment/acb-vietqr.png" alt="{{ c.checkout.qrAlt }}" loading="lazy" width="487" height="353" style="width:220px;height:auto;border-radius:8px;display:block" />
-                    <a href="uploads/payment/acb-vietqr.png" download="{{ qrFileName }}" style="display:inline-block;margin-top:8px;font-size:13px;font-weight:800;color:#1a6e3c;text-decoration:none;padding:8px 14px;border:1.5px solid #1a6e3c;border-radius:50px" style-hover="background:#eaf4ee">⬇ {{ c.checkout.saveQr }}</a>
                   </div>
                   <div>
                     <sc-for list="{{ paymentRows }}" as="row" hint-placeholder-count="5">
