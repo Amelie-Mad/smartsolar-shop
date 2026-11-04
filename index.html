@@ -349,7 +349,7 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
       <h2 style="font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-0.8px;color:#0d1117;line-height:1.15;margin-bottom:8px">{{ c.product.title }}</h2>
       <p style="font-size:16px;color:#6b7280;margin-bottom:48px;font-weight:600">{{ c.product.subtitle }}</p>
       <div style="display:grid;grid-template-columns:{{ productCols }};gap:56px;align-items:start">
-        <div style="position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1/1;background:#fff;touch-action:pan-y" onMouseEnter="{{ pauseCarousel }}" onMouseLeave="{{ resumeCarousel }}" onTouchStart="{{ carouselTouchStart }}" onTouchEnd="{{ carouselTouchEnd }}">
+        <div id="product-carousel" style="position:relative;border-radius:20px;overflow:hidden;aspect-ratio:1/1;background:#fff;touch-action:pan-y" onMouseEnter="{{ pauseCarousel }}" onMouseLeave="{{ resumeCarousel }}" onTouchStart="{{ carouselTouchStart }}" onTouchEnd="{{ carouselTouchEnd }}">
           <div style="{{ carouselTrackStyle }}">
             <sc-for list="{{ carouselSlides }}" as="slide" hint-placeholder-count="8">
               <img src="{{ slide.src }}" alt="{{ slide.alt }}" loading="lazy" decoding="async" draggable="false" style="width:100%;height:100%;flex-shrink:0;object-fit:cover;display:block;user-select:none" />
@@ -390,7 +390,7 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
               <button style="background:#f7d65a;color:#0d1117;font-size:15px;font-weight:800;padding:16px 24px;border:none;border-radius:50px;cursor:pointer;font-family:inherit;flex:1" style-hover="background:#d4b020" onClick="{{ addKit }}">{{ c.shop.addToCart }}</button>
             </div>
           </div>
-          <div style="margin-top:16px;background:#fff;border:1.5px solid #eef0f3;border-radius:14px;padding:20px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
+          <div id="battery-addon" style="margin-top:16px;background:#fff;border:1.5px solid #eef0f3;border-radius:14px;padding:20px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap">
             <div style="flex:1;min-width:200px">
               <div style="display:inline-block;background:#fdf6e3;color:#a8860f;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:4px 10px;border-radius:6px;margin-bottom:8px">{{ c.shop.addonBadge }}</div>
               <div style="font-size:16px;font-weight:800;color:#0d1117;margin-bottom:4px">{{ c.products.battery }}</div>
@@ -993,7 +993,10 @@ class Component extends DCLogic {
     this._onResize = () => this.setState({ windowWidth: window.innerWidth });
     window.addEventListener("resize", this._onResize);
     this._onScroll = () => {
-      this.setState({ scrolled: window.scrollY > 480 });
+      // The floating order bar would cover the add-to-basket buttons, so hide it while the buy box or battery add-on is on screen
+      const onScreen = (id) => { const r = document.getElementById(id)?.getBoundingClientRect(); return !!r && r.bottom > 0 && r.top < window.innerHeight; };
+      const buyBoxOnScreen = onScreen("buy-box") || onScreen("battery-addon");
+      this.setState({ scrolled: window.scrollY > 480, buyBoxOnScreen });
       this.trackProductSeen();
     };
     window.addEventListener("scroll", this._onScroll);
@@ -1031,6 +1034,18 @@ class Component extends DCLogic {
 
   scrollTo(id, block = "start") { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block }); }
 
+  // Order buttons: on laptops the carousel sits beside the buy box, so frame both (carousel top under
+  // the header, buy box fully visible). Screens too short for both keep the buy box whole. Phones: centre the buy box.
+  scrollToBuyBox() {
+    const box = document.getElementById("buy-box")?.getBoundingClientRect();
+    const carousel = document.getElementById("product-carousel")?.getBoundingClientRect();
+    if (!box) return;
+    if (!carousel || box.left < carousel.right) { this.scrollTo("buy-box", "center"); return; }
+    const carouselTop = carousel.top + window.scrollY - 80;
+    const boxVisible = box.bottom + window.scrollY + 24 - window.innerHeight;
+    window.scrollTo({ top: Math.max(carouselTop, boxVisible), behavior: "smooth" });
+  }
+
   setCart(cart) { saveCart(cart); this.setState({ cart }); }
   setQty(id, qty) {
     const cart = { ...this.state.cart };
@@ -1045,13 +1060,14 @@ class Component extends DCLogic {
   openCart() { document.body.style.overflow = "hidden"; this.setState({ cartOpen: true }); }
   closeCart() { document.body.style.overflow = ""; this.setState({ cartOpen: false }); }
 
-  // Back to the landing page, optionally scrolling to a section once it has rendered
-  showShop(sectionId, block) {
+  // Back to the landing page, then scroll to a section id (or run a scroll function) once it has rendered
+  showShop(target) {
     this.closeCart();
-    if (this.state.view === "shop") { if (sectionId) this.scrollTo(sectionId, block); return; }
+    const go = typeof target === "function" ? target : () => (target ? this.scrollTo(target) : window.scrollTo(0, 0));
+    if (this.state.view === "shop") { if (target) go(); return; }
     if (location.hash) history.replaceState(null, "", location.pathname + location.search);
     this.setState({ view: "shop" });
-    setTimeout(() => (sectionId ? this.scrollTo(sectionId, block) : window.scrollTo(0, 0)), 50);
+    setTimeout(go, 50);
   }
   goCheckout() {
     const { cart, orderRef } = this.state;
@@ -1107,7 +1123,7 @@ class Component extends DCLogic {
   }
 
   renderVals() {
-    const { lang, openFaq, windowWidth, scrolled, slide, zaloHover, view, cart, cartOpen, kitQty, checkout, payMethod, checkoutError, placing, orderRef, placedOrder } = this.state;
+    const { lang, openFaq, windowWidth, scrolled, buyBoxOnScreen, slide, zaloHover, view, cart, cartOpen, kitQty, checkout, payMethod, checkoutError, placing, orderRef, placedOrder } = this.state;
     const c = T[lang];
     const isMobile = windowWidth < 768;
     const isShopView = view === "shop";
@@ -1173,10 +1189,10 @@ class Component extends DCLogic {
       heroBenefit, restBenefits,
       benefitsGridCols: isMobile ? "1fr" : "0.9fr 1.6fr",
       isDesktop: !isMobile,
-      showMobileBar: isMobile && scrolled && isShopView,
-      showDesktopFab: !isMobile && scrolled && isShopView,
+      showMobileBar: isMobile && scrolled && isShopView && !buyBoxOnScreen,
+      showDesktopFab: !isMobile && scrolled && isShopView && !buyBoxOnScreen,
       // Sits above the mobile order bar / desktop order widget when those are showing
-      zaloWrapStyle: { position: "fixed", right: isMobile ? 16 : 28, bottom: scrolled && isShopView ? (isMobile ? 84 : 124) : (isMobile ? 16 : 28), zIndex: 301, display: "flex", alignItems: "center", gap: 14, transition: "bottom 0.3s", fontFamily: "'Manrope',sans-serif" },
+      zaloWrapStyle: { position: "fixed", right: isMobile ? 16 : 28, bottom: scrolled && isShopView && !buyBoxOnScreen ? (isMobile ? 84 : 124) : (isMobile ? 16 : 28), zIndex: 301, display: "flex", alignItems: "center", gap: 14, transition: "bottom 0.3s", fontFamily: "'Manrope',sans-serif" },
       showZaloTip: !isMobile && zaloHover,
       showZalo: () => this.setState({ zaloHover: true }),
       hideZalo: () => this.setState({ zaloHover: false }),
@@ -1191,7 +1207,7 @@ class Component extends DCLogic {
       goBenefits: () => this.showShop("benefits"),
       goProduct: () => this.showShop("product"),
       goFaq: () => this.showShop("faq"),
-      goOrder: () => this.showShop("buy-box", "center"),
+      goOrder: () => this.showShop(() => this.scrollToBuyBox()),
 
       // Shop + basket
       isShopView, isCheckoutView: view === "checkout", isConfirmView: view === "confirm",
