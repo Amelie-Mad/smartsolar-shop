@@ -1178,10 +1178,10 @@ class Component extends DCLogic {
       langEnStyle: lang === "en" ? activeLang : inactiveLang,
       setLangVi: () => this.setState({ lang: "vi" }),
       setLangEn: () => this.setState({ lang: "en" }),
-      scrollTop: () => window.scrollTo({ top: 0, behavior: "smooth" }),
-      goBenefits: () => this.scrollTo("benefits"),
-      goProduct: () => this.scrollTo("product"),
-      goFaq: () => this.scrollTo("faq"),
+      scrollTop: () => (this.state.view === "shop" ? window.scrollTo({ top: 0, behavior: "smooth" }) : this.showShop()),
+      goBenefits: () => this.showShop("benefits"),
+      goProduct: () => this.showShop("product"),
+      goFaq: () => this.showShop("faq"),
       goOrder: () => this.showShop("product"),
 
       // Shop + basket
