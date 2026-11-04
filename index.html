@@ -377,7 +377,7 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
               </div>
             </sc-for>
           </div>
-          <div style="background:#0d1117;color:#fff;border-radius:14px;padding:24px 28px">
+          <div id="buy-box" style="background:#0d1117;color:#fff;border-radius:14px;padding:24px 28px">
             <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">{{ c.priceLabel }}</div>
             <div style="font-size:24px;font-weight:900;color:#f7d65a;letter-spacing:-0.5px;margin-bottom:4px">{{ c.product.price }}</div>
             <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:20px;font-weight:500">{{ c.product.priceSub }}</div>
@@ -1029,7 +1029,7 @@ class Component extends DCLogic {
     trackPixel("ViewContent", { content_ids: ["kit"], content_type: "product", content_name: "SmartSolar Mini", value: PRODUCTS.kit.price, currency: "VND" });
   }
 
-  scrollTo(id) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth" }); }
+  scrollTo(id, block = "start") { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block }); }
 
   setCart(cart) { saveCart(cart); this.setState({ cart }); }
   setQty(id, qty) {
@@ -1046,12 +1046,12 @@ class Component extends DCLogic {
   closeCart() { document.body.style.overflow = ""; this.setState({ cartOpen: false }); }
 
   // Back to the landing page, optionally scrolling to a section once it has rendered
-  showShop(sectionId) {
+  showShop(sectionId, block) {
     this.closeCart();
-    if (this.state.view === "shop") { if (sectionId) this.scrollTo(sectionId); return; }
+    if (this.state.view === "shop") { if (sectionId) this.scrollTo(sectionId, block); return; }
     if (location.hash) history.replaceState(null, "", location.pathname + location.search);
     this.setState({ view: "shop" });
-    setTimeout(() => (sectionId ? this.scrollTo(sectionId) : window.scrollTo(0, 0)), 50);
+    setTimeout(() => (sectionId ? this.scrollTo(sectionId, block) : window.scrollTo(0, 0)), 50);
   }
   goCheckout() {
     const { cart, orderRef } = this.state;
@@ -1191,7 +1191,7 @@ class Component extends DCLogic {
       goBenefits: () => this.showShop("benefits"),
       goProduct: () => this.showShop("product"),
       goFaq: () => this.showShop("faq"),
-      goOrder: () => this.showShop("product"),
+      goOrder: () => this.showShop("buy-box", "center"),
 
       // Shop + basket
       isShopView, isCheckoutView: view === "checkout", isConfirmView: view === "confirm",
