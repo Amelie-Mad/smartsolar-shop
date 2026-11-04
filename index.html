@@ -504,20 +504,15 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
 
   <!-- FLOATING ZALO BUTTON -->
   <div style="{{ zaloWrapStyle }}">
-    <a href="tel:+84343194790" aria-label="{{ c.hotline }}" title="{{ c.hotline }}" onClick="{{ trackCall }}" style="width:52px;height:52px;margin-right:4px;border-radius:50%;background:#1a6e3c;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(26,110,60,0.35);transition:transform 0.2s" style-hover="transform:scale(1.08)">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    <sc-if value="{{ showZaloTip }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;background:#0d1117;color:#fff;font-size:14px;font-weight:600;padding:10px 16px;border-radius:10px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2)">
+        {{ c.zalo }}
+        <div style="position:absolute;right:-6px;top:50%;width:12px;height:12px;background:#0d1117;transform:translateY(-50%) rotate(45deg)"></div>
+      </div>
+    </sc-if>
+    <a href="https://zalo.me/343194790" target="_blank" rel="noopener noreferrer" aria-label="{{ c.zalo }}" style="width:60px;height:60px;display:block;flex-shrink:0;transition:transform 0.2s" style-hover="transform:scale(1.08)" onMouseEnter="{{ showZalo }}" onMouseLeave="{{ hideZalo }}" onClick="{{ trackZalo }}">
+      <img src="uploads/zalo-logo.webp" alt="" width="60" height="60" style="width:100%;height:100%;display:block;filter:drop-shadow(0 4px 12px rgba(0,104,255,0.35)) drop-shadow(0 1px 3px rgba(0,0,0,0.15))" />
     </a>
-    <div style="display:flex;align-items:center;gap:14px">
-      <sc-if value="{{ showZaloTip }}" hint-placeholder-val="{{ false }}">
-        <div style="position:relative;background:#0d1117;color:#fff;font-size:14px;font-weight:600;padding:10px 16px;border-radius:10px;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,0.2)">
-          {{ c.zalo }}
-          <div style="position:absolute;right:-6px;top:50%;width:12px;height:12px;background:#0d1117;transform:translateY(-50%) rotate(45deg)"></div>
-        </div>
-      </sc-if>
-      <a href="https://zalo.me/343194790" target="_blank" rel="noopener noreferrer" aria-label="{{ c.zalo }}" style="width:60px;height:60px;display:block;flex-shrink:0;transition:transform 0.2s" style-hover="transform:scale(1.08)" onMouseEnter="{{ showZalo }}" onMouseLeave="{{ hideZalo }}" onClick="{{ trackZalo }}">
-        <img src="uploads/zalo-logo.webp" alt="" width="60" height="60" style="width:100%;height:100%;display:block;filter:drop-shadow(0 4px 12px rgba(0,104,255,0.35)) drop-shadow(0 1px 3px rgba(0,0,0,0.15))" />
-      </a>
-    </div>
   </div>
 
   <!-- BASKET DRAWER -->
@@ -710,7 +705,6 @@ const T = {
     ig: { title: "Theo dõi hành trình của chúng tôi", handle: "@smartsolarvn", cta: "Xem trên Instagram" },
     mobileBar: { label: "Tiết kiệm ước tính", value: "~400K₫/tháng" },
     zalo: "Liên hệ với chúng tôi qua Zalo",
-    hotline: "Gọi hotline 0343 194 790",
     footer: {
       company: "CÔNG TY TNHH NĂNG LƯỢNG MẶT TRỜI SMARTSOLAR",
       reg: "Giấy chứng nhận ĐKDN số 0318442962 do Sở KH&ĐT TP.HCM cấp ngày 07/05/2024",
@@ -854,7 +848,6 @@ const T = {
     ig: { title: "Follow our journey", handle: "@smartsolarvn", cta: "View on Instagram" },
     mobileBar: { label: "Estimated savings", value: "~400K₫/month" },
     zalo: "Chat with us on Zalo",
-    hotline: "Call our hotline 0343 194 790",
     footer: {
       company: "SMARTSOLAR ENERGY COMPANY LIMITED",
       reg: "Business registration no. 0318442962, issued by HCMC Department of Planning and Investment, 07/05/2024",
@@ -1184,7 +1177,7 @@ class Component extends DCLogic {
       showMobileBar: isMobile && scrolled && isShopView,
       showDesktopFab: !isMobile && scrolled && isShopView,
       // Sits above the mobile order bar / desktop order widget when those are showing
-      zaloWrapStyle: { position: "fixed", right: isMobile ? 16 : 28, bottom: scrolled && isShopView ? (isMobile ? 84 : 124) : (isMobile ? 16 : 28), zIndex: 301, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12, transition: "bottom 0.3s", fontFamily: "'Manrope',sans-serif" },
+      zaloWrapStyle: { position: "fixed", right: isMobile ? 16 : 28, bottom: scrolled && isShopView ? (isMobile ? 84 : 124) : (isMobile ? 16 : 28), zIndex: 301, display: "flex", alignItems: "center", gap: 14, transition: "bottom 0.3s", fontFamily: "'Manrope',sans-serif" },
       showZaloTip: !isMobile && zaloHover,
       showZalo: () => this.setState({ zaloHover: true }),
       hideZalo: () => this.setState({ zaloHover: false }),
@@ -1247,7 +1240,6 @@ class Component extends DCLogic {
       summaryStyle: { background: "#fff", border: "1.5px solid #eef0f3", borderRadius: 16, padding: 28, position: isMobile ? "static" : "sticky", top: 88 },
 
       trackZalo: () => trackPixel("Contact", { content_name: "Zalo floating button" }),
-      trackCall: () => trackPixel("Contact", { content_name: "Hotline call button" }),
       qrFileName: `SmartSolar-QR-${payRef || "ACB"}.png`,
     };
   }
