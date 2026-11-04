@@ -49,7 +49,6 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
   a:hover{color:#145c30;}
   @keyframes logoMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 </style>
-<script src="./image-slot.js"></script>
 <script type="module" src="https://w.behold.so/widget.js"></script>
 </helmet>
 
@@ -299,7 +298,7 @@ src="https://www.facebook.com/tr?id=1753517255725608&ev=PageView&noscript=1"
         <sc-for list="{{ c.howItWorks.steps }}" as="s" hint-placeholder-count="4">
           <div>
             <div style="width:100%;aspect-ratio:1/1;border-radius:50%;overflow:hidden;background:#f6f7f9;margin-bottom:24px">
-              <image-slot id="{{ s.slotId }}" shape="circle" placeholder="{{ s.placeholder }}"></image-slot>
+              <img src="{{ s.img }}" alt="{{ s.alt }}" loading="lazy" width="330" height="330" style="width:100%;height:100%;object-fit:cover;display:block" />
             </div>
             <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px">
               <span style="font-size:13px;font-weight:800;color:#d4b020;text-transform:uppercase;letter-spacing:0.5px">{{ c.howItWorks.stepLabel }}</span>
@@ -598,10 +597,10 @@ const T = {
     howItWorks: {
       eyebrow: "Cách hoạt động", title: "Chỉ cần cắm điện — mọi thứ còn lại tự động", stepLabel: "Bước",
       steps: [
-        { num: "01", slotId: "step-1", placeholder: "Ảnh cận cảnh tấm pin", title: "Tấm pin hấp thụ từng tia nắng", desc: "Tấm pin JA Solar 460W lắp trên ban công hoặc mái nhà hấp thụ ánh nắng và chuyển hóa thành điện DC." },
-        { num: "02", slotId: "step-2", placeholder: "Ảnh cắm vào ổ điện", title: "Điện mặt trời chảy thẳng vào ổ điện", desc: "Cắm trực tiếp vào ổ điện nhà bạn. Thiết bị trong nhà tự động dùng điện mặt trời trước, phần dư mới hòa vào lưới điện." },
-        { num: "03", slotId: "step-3", placeholder: "Ảnh app S-Miles trên điện thoại", title: "Theo dõi và kiểm soát sản lượng", desc: "Xem sản lượng điện và tiền tiết kiệm theo thời gian thực qua app S-Miles Home." },
-        { num: "04", slotId: "step-4", placeholder: "Ảnh thiết bị gia dụng đang dùng điện", title: "Dùng điện mặt trời, giảm hóa đơn", desc: "Tiết kiệm hàng trăm nghìn đồng mỗi tháng và chủ động hơn với nguồn điện của chính mình." },
+        { num: "01", img: "uploads/step-1-panel-closeup.png", alt: "Ảnh cận cảnh tấm pin", title: "Tấm pin hấp thụ từng tia nắng", desc: "Tấm pin JA Solar 460W lắp trên ban công hoặc mái nhà hấp thụ ánh nắng và chuyển hóa thành điện DC." },
+        { num: "02", img: "uploads/step-2-plug-outlet.png", alt: "Ảnh cắm vào ổ điện", title: "Điện mặt trời chảy thẳng vào ổ điện", desc: "Cắm trực tiếp vào ổ điện nhà bạn. Thiết bị trong nhà tự động dùng điện mặt trời trước, phần dư mới hòa vào lưới điện." },
+        { num: "03", img: "uploads/step-3-app-phone.png", alt: "Ảnh app S-Miles trên điện thoại", title: "Theo dõi và kiểm soát sản lượng", desc: "Xem sản lượng điện và tiền tiết kiệm theo thời gian thực qua app S-Miles Home." },
+        { num: "04", img: "uploads/step-4-appliances.png", alt: "Ảnh thiết bị gia dụng đang dùng điện", title: "Dùng điện mặt trời, giảm hóa đơn", desc: "Tiết kiệm hàng trăm nghìn đồng mỗi tháng và chủ động hơn với nguồn điện của chính mình." },
       ],
     },
     billCompare: {
@@ -741,10 +740,10 @@ const T = {
     howItWorks: {
       eyebrow: "How it works", title: "Just plug it in — everything else runs on its own", stepLabel: "Step",
       steps: [
-        { num: "01", slotId: "step-1", placeholder: "Close-up panel photo", title: "Panels catch every ray of sunlight", desc: "JA Solar 460W panels mounted on your balcony or roof absorb sunlight and convert it into DC electricity." },
-        { num: "02", slotId: "step-2", placeholder: "Photo of plugging into outlet", title: "Solar power flows straight into your outlet", desc: "Plug directly into your home outlet. Appliances automatically draw on solar power first, any surplus flows to the grid." },
-        { num: "03", slotId: "step-3", placeholder: "S-Miles app on phone photo", title: "Monitor and control your output", desc: "Track production and savings in real time through the S-Miles Home app." },
-        { num: "04", slotId: "step-4", placeholder: "Household appliances photo", title: "Use solar power, cut your bill", desc: "Save hundreds of thousands of đồng each month and gain more independence over your own electricity." },
+        { num: "01", img: "uploads/step-1-panel-closeup.png", alt: "Close-up panel photo", title: "Panels catch every ray of sunlight", desc: "JA Solar 460W panels mounted on your balcony or roof absorb sunlight and convert it into DC electricity." },
+        { num: "02", img: "uploads/step-2-plug-outlet.png", alt: "Photo of plugging into outlet", title: "Solar power flows straight into your outlet", desc: "Plug directly into your home outlet. Appliances automatically draw on solar power first, any surplus flows to the grid." },
+        { num: "03", img: "uploads/step-3-app-phone.png", alt: "S-Miles app on phone photo", title: "Monitor and control your output", desc: "Track production and savings in real time through the S-Miles Home app." },
+        { num: "04", img: "uploads/step-4-appliances.png", alt: "Household appliances photo", title: "Use solar power, cut your bill", desc: "Save hundreds of thousands of đồng each month and gain more independence over your own electricity." },
       ],
     },
     billCompare: {
